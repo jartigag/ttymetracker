@@ -83,8 +83,8 @@ if __name__ == '__main__':
                 if int(opt)<len(todos) and int(opt)>=0: # that is, `opt` is a valid index of `todos`
                     mark_as_completed(int(opt), todos, logbooksDir)
                     print("La tarea {}:\n\t\033[1m{}\033[0m\nse ha marcado como completada\n".format(opt,todos[int(opt)]))
-                    todos, dones = load_lists(logbooks) 
-                    load_files(args.modules)
+                    todos, dones = load_lists(logbooks, logbooksDir)
+                    load_files()
                 else:
                     print("[\033[91m!\033[0m] número inválido")
                 print_list(todos, dones)
