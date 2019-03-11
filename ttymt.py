@@ -67,8 +67,12 @@ if __name__ == '__main__':
         help='funcionalidades que se van a cargar')
     args = parser.parse_args()
     logbooksDir = args.logbooksDir
-    logbooks = sorted([f for f in os.listdir(logbooksDir) if re.match(r'[0-9]+.*\.md', f)])
-
+    try:
+        logbooks = sorted([f for f in os.listdir(logbooksDir) if re.match(r'[0-9]+.*\.md', f)])
+    except FileNotFoundError:
+        print('"{}" no existe'.format(logbooksDir))
+        print("\ntaluego!")
+        sys.exit(-1)
     try:
         load_files()
         if 'todo-list' in args.modules:
@@ -87,6 +91,6 @@ if __name__ == '__main__':
                 opt = input("Marcar como completada la tarea nº: ")
     except KeyboardInterrupt:
         pass
-    #finally:
-    #    print("\ntaluego!")
-    #    sys.exit(0)
+    finally:
+        print("\ntaluego!")
+        sys.exit(0)

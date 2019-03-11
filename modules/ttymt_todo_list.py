@@ -50,8 +50,6 @@ def load_lists(logbooks, logbooksDir):
                                 lin=lines[i+2] # just for readability
                                 task = lin[lin.index('['):][:-1] # from '[x] one finished task\n', it takes 'one finished task'
                                 dones.append(task)
-                            timestamp = line[-13:-4] # this takes something like '15:05:54'
-                            print('{}{}'.format(timestamp,lines[i+2])) # print timestamp and note
         except IOError:
             continue
     return todos, dones
