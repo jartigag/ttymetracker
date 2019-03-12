@@ -22,17 +22,16 @@ mkdir -p $logbookDir
 
 echo "vamos a instalar ttymetracker!"
 
-echo "1. instalando el plugin vim-logbook (también podría obtenerse con vim-plug,
-añadiendo:
+echo "1. instalando el plugin vim-logbook"
 
+echo "
 call plug#begin('~/.vim/plugged')
 Plug 'jartigag/vim-logbook'
 call plug#end()
+" >> ~/.vimrc
 
-al fichero ~/.vimrc y ejecutando \":PlugInstall\" en vim)
-"
 mkdir -p ~/.vim ~/.vim/plugged ~/.vim/plugged/vim-logbook
-cp install/vim-logbook/* ~/.vim/plugged/vim-logbook/
+cp -r install/vim-logbook/* ~/.vim/plugged/vim-logbook/
 
 echo '2. añadiendo algunos alias de bash útiles: "lb" y "tmt"..'
 echo "
@@ -49,7 +48,7 @@ tmt () {
 
 echo "3. se incluirá algún fichero logbook de ejemplo.."
 echo "
-$(date)
+$(date +%c)
 ---
 > Tu primera entrada
 
@@ -64,7 +63,7 @@ o cualquier otro de los recursos que permite [Markdown](https://es.wikipedia.org
 Puedes abrir en vim el logbook de hoy ejecutando \"lb\" desde la terminal,
 y añadir la fecha y hora actual para empezar una nueva entrada con \":Ts\" desde vim.
 
-$(date --date="+3 minutes")
+$(date +%c --date="+3 minutes")
 ---
 > [ ] Seguir usando logbook
 " > $logbookDir/$(date '+%Y-%m-%d').md
