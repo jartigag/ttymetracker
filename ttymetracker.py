@@ -11,7 +11,7 @@
 # usage: python3 ttymetracker.py logbooksDir --modules [todo-list anuko chrono]
 
 __author__ = "@jartigag"
-__version__ = "0.2"
+__version__ = "0.3"
 
 #changelog:
 #
@@ -61,7 +61,7 @@ def load_files():
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(
-        description="imprime una lista con tus tareas, para que puedas gestionarlas fácilmente. v%s por %s".format(__version__, __author__))
+        description="imprime una lista con tus tareas, para que puedas gestionarlas fácilmente. v{} por {}".format(__version__, __author__))
     parser.add_argument('logbooksDir')
     parser.add_argument('-m','--modules',choices=['todo-list'],default='',
         help='funcionalidades que se van a cargar')

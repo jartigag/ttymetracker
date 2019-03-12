@@ -1,4 +1,4 @@
-# ttymetracker
+# ~$ ttymetracker
 
 just a simple command-line tool that will help you to track your time  
 and manage your pending and completed tasks.
@@ -24,7 +24,7 @@ and manage your pending and completed tasks.
 # usage: python3 ttymetracker.py logbooksDir --modules [todo-list anuko chrono]
 
 __author__ = "@jartigag"
-__version__ = "0.2"
+__version__ = "0.3"
 
 #changelog:
 #
@@ -38,10 +38,10 @@ __version__ = "0.2"
 ```
 
 ### `vim-logbook`, huh?
-this tools use the [vim-logbook](https://github.com/jamesroutley/vim-logbook) system, explained in its readme and in a [blogpost](https://routley.io/tech/2017/11/23/logbook.html).  
-[i forked it](https://github.com/jartigag/vim-logbook) and tweaked it a little bit.
+this tool uses the [vim-logbook](https://github.com/jamesroutley/vim-logbook) system, explained in its readme and in its [blogpost](https://routley.io/tech/2017/11/23/logbook.html).  
+[i forked it](https://github.com/jartigag/vim-logbook) and tweaked it a little.
 
-**vim-logbook** just helps you to log your activity in [.md](https://en.wikipedia.org/wiki/Markdown) files, like this:
+**vim-logbook** simply helps you to log your activity in [.md](https://en.wikipedia.org/wiki/Markdown) files, like this:
 ```
 lun 04 mar 2019 15:05:54 CET
 ---
@@ -69,8 +69,8 @@ python tool.py --regenerate_databases
 ```
 
 ### `ttymetracker`, huh?
-so **ttymetracker** prints all your .md files in a specific logbook/ directory.  
-for example, along with its `todo-list` module, it would look like that:
+**ttymetracker** prints all your .md files from a specific logbook/ directory.  
+for example, along with ttymetracker's `todo-list` module, it would look like that:
 ```
 $ python3 ttymetracker.py -m todo-list ~/logbook
 =====
@@ -90,5 +90,5 @@ lun 04 mar 2019
 13 tareas completadas
 Marcar como completada la tarea nº: 
 ```
-so you can know at a glance which tasks you've spent time on,  
-and easily mark pending tasks as completed (that action will also be registered on your logbook).
+so now you can know at a glance when did you do any task and how much did it take you.  
+in addition, you can easily mark pending tasks as completed (that action will also be registered on your logbook).

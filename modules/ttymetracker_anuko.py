@@ -11,6 +11,6 @@
 # usage: python3 ttymetracker.py logbooksDir --modules anuko
 
 __author__ = "@jartigag"
-__version__ = "0.3"
+__version__ = "0.4"
 
 ### TODO ###
