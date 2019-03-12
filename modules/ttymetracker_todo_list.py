@@ -2,13 +2,13 @@
 # -*- coding: utf-8 -*-
 #
 # ##########
-# # ttymt: terminal time tracker
+# # ttymetracker: terminal time tracker
 # ##########
 #
-# this module for ttymt prints a todo-list and allows to mark
+# this module for ttymetracker prints a todo-list and allows to mark
 # pending tasks as completed, registering it on your logbook.
 #
-# usage: python3 ttymt.py logbooksDir --modules todo-list
+# usage: python3 ttymetracker.py logbooksDir --modules todo-list
 
 __author__ = "@jartigag"
 __version__ = "0.2"

@@ -2,13 +2,13 @@
 # -*- coding: utf-8 -*-
 #
 # ##########
-# # ttymt: terminal time tracker
+# # ttymetracker: terminal time tracker
 # ##########
 #
 # basically a script to list the tasks you wrote down in your logbook directory
 # and manage them with some modules, like the todo-list one.
 #
-# usage: python3 ttymt.py logbooksDir --modules [todo-list anuko chrono]
+# usage: python3 ttymetracker.py logbooksDir --modules [todo-list anuko chrono]
 
 __author__ = "@jartigag"
 __version__ = "0.2"
@@ -26,7 +26,7 @@ __version__ = "0.2"
 import os, sys
 import re
 import argparse
-from modules.ttymt_todo_list import load_lists, print_list, mark_as_completed
+from modules.ttymetracker_todo_list import load_lists, print_list, mark_as_completed
 
 '''
 Ejemplo de tarea:

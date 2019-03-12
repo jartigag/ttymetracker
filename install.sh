@@ -4,7 +4,7 @@
 #date: 10/03/2019
 #version: 0.2
 #
-# install ttymt, the terminal time tracker
+# install ttymetracker, the terminal time tracker
 # usage: bash install.sh logbookDir
 
 # check if logbookDir is provided:
@@ -16,7 +16,7 @@ fi
 logbookDir="$PWD/$1"
 mkdir -p $logbookDir
 
-echo "vamos a instalar ttymt!"
+echo "vamos a instalar ttymetracker!"
 echo "1. instalando el plugin vim-logbook (también podría obtenerse con vim-plug,
 añadiendo:
 
@@ -145,7 +145,7 @@ lb() {
 	vim $logbookDir/$(date '+%Y-%m-%d').md
 }
 tmt () {
-	python3 $logbookDir/ttymt/ttymt.py $logbookDir -m todo-list
+	python3 $logbookDir/ttymetracker/ttymetracker.py $logbookDir -m todo-list
 }
 " | tee -a ~/.bash_aliases > /dev/null
 
