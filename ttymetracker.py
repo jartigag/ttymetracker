@@ -60,7 +60,10 @@ def load_files(listFormat):
                                 else:
                                     print('{}'.format(day))
                             timestamp = line[-13:-4] # this takes something like '15:05:54'
-                            print('{}{}'.format(timestamp,lines[i+2])) # print timestamp and note
+                            if not listFormat:
+                                print('{}{}'.format(timestamp,lines[i+2])) # print timestamp and note
+                            else:
+                                print('{}- {}{}'.format(day,timestamp,lines[i+2])) # print day, timestamp and note
         except IOError:
             continue
 
