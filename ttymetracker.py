@@ -22,6 +22,9 @@ __version__ = "0.3"
 # * modularization
 # * exit gracefully
 # * install.sh
+#
+# -- v0.4 --:
+# * --list option
 
 import os, sys
 import re
@@ -36,7 +39,7 @@ lun 04 mar 2019 15:05:54 CET
 > Correcciones en las gráficas de amazonDashboard
 '''
 
-def load_files(): 
+def load_files(listFormat):
     for lb in logbooks:
         try:
             with open('{}/{}'.format(logbooksDir,lb)) as f:
@@ -52,7 +55,10 @@ def load_files():
                                 day = actual_day
                                 if day[:3]=='lun':
                                     print("=====\n")
-                                print('\033[4m{}\033[0m'.format(day))
+                                if not listFormat:
+                                    print('\033[4m{}\033[0m'.format(day))
+                                else:
+                                    print('{}'.format(day))
                             timestamp = line[-13:-4] # this takes something like '15:05:54'
                             print('{}{}'.format(timestamp,lines[i+2])) # print timestamp and note
         except IOError:
@@ -63,6 +69,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description="imprime una lista con tus tareas, para que puedas gestionarlas fácilmente. v{} por {}".format(__version__, __author__))
     parser.add_argument('logbooksDir')
+    parser.add_argument('-l','--list',action='store_true',
+        help='imprimir lista en formato plano')
     parser.add_argument('-m','--modules',choices=['todo-list'],default='',
         help='funcionalidades que se van a cargar')
     args = parser.parse_args()
@@ -74,7 +82,7 @@ if __name__ == '__main__':
         print("\ntaluego!")
         sys.exit(-1)
     try:
-        load_files()
+        load_files(args.list)
         if 'todo-list' in args.modules:
             todos, dones = load_lists(logbooks, logbooksDir)
             print_list(todos, dones)
