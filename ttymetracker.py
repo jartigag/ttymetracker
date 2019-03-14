@@ -53,17 +53,14 @@ def load_files(listFormat):
                             actual_day = ''.join( line.split(':')[0][:-2] ) # line.split(':')[0][:-2] takes something like 'lun 04 mar 2019 '
                             if actual_day!=day:
                                 day = actual_day
-                                if day[:3]=='lun':
+                                if day[:3]=='lun' and not listFormat:
                                     print("=====\n")
-                                if not listFormat:
                                     print('\033[4m{}\033[0m'.format(day))
-                                else:
-                                    print('{}'.format(day))
                             timestamp = line[-13:-4] # this takes something like '15:05:54'
-                            if not listFormat:
-                                print('{}{}'.format(timestamp,lines[i+2])) # print timestamp and note
-                            else:
-                                print('{}- {}{}'.format(day,timestamp,lines[i+2])) # print day, timestamp and note
+                        if not listFormat:
+                            print('{}{}'.format(timestamp,lines[i+2])) # print timestamp and note
+                        else:
+                            print('{}- {}{}'.format(day,timestamp,lines[i+2])) # print day, timestamp and note
         except IOError:
             continue
 
