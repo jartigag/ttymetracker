@@ -53,8 +53,9 @@ def load_files(listFormat):
                             actual_day = ''.join( line.split(':')[0][:-2] ) # line.split(':')[0][:-2] takes something like 'lun 04 mar 2019 '
                             if actual_day!=day:
                                 day = actual_day
-                                if day[:3]=='lun' and not listFormat:
-                                    print("=====\n")
+                                if not listFormat:
+                                    if day[:3]=='lun':
+                                        print("=====\n")
                                     print('\033[4m{}\033[0m'.format(day))
                             timestamp = line[-13:-4] # this takes something like '15:05:54'
                         if not listFormat:
