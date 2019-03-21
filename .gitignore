@@ -1,5 +1,7 @@
 modules/ttymetracker_credentials.py
 *.bak
+*.tmp
+*.cfg
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

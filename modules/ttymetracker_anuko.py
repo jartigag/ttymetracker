@@ -13,10 +13,12 @@
 __author__ = "@jartigag"
 __version__ = "0.4"
 
-#TODO1: ttytracker_aliases.txt: a plain-text table with shortcuts to anuko projects and clients.
-#                               for example: #soporteSamsung = I_207_SAMSUNG_19_Soporte_19 @ Samsung
+#TODO1: ttytracker_aliases.cfg: a config json that matches shortcuts with anuko projects and clients.
+#                               for example: 
+#                               for example: [{"shorcut": "soporteSamsung", "project": "I_207_SAMSUNG_19_Soporte_19", "client": "Samsung"}, {"shorcut": "devSamsung", ...}]
+#                                            └── #soporteSamsung = I_207_SAMSUNG_19_Soporte_19 @ Samsung | #devSamsung = I_208_SAMSUNG_19_Desarrollo_19 @ Samsung
 #
-#TODO2: open a commit.txt file in vim before posting data to anuko
+#TODO2: open a commit.tmp file in vim before posting data to anuko
 
 from bs4 import BeautifulSoup
 import urllib.request
