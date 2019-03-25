@@ -30,7 +30,7 @@ import os, sys
 import re
 import argparse
 from modules.ttymetracker_todo_list import load_lists, print_list, mark_as_completed
-from modules.ttymetracker_anuko import print_today
+from modules.ttymetracker_anuko import commit_today, push_today
 
 '''
 Ejemplo de tarea:
@@ -77,6 +77,7 @@ if __name__ == '__main__':
         help='funcionalidades que se van a cargar')
     args = parser.parse_args()
     logbooksDir = args.logbooksDir
+    if logbooksDir.endswith('/'): logbooksDir=logbooksDir[:-1]
     try:
         logbooks = sorted([f for f in os.listdir(logbooksDir) if re.match(r'[0-9]+.*\.md', f)])
     except FileNotFoundError:
@@ -100,8 +101,8 @@ if __name__ == '__main__':
                 print_list(todos, dones)
                 opt = input("Marcar como completada la tarea nº: ")
         elif 'anuko' in args.modules:
-            print_today(logbooksDir)
-            opt = input("acción: ")
+            commit_today(logbooksDir)
+            push_today()
     except KeyboardInterrupt:
         pass
     finally:

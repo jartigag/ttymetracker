@@ -30,14 +30,15 @@ import os
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-def print_today(logbooksDir):
+def commit_today(logbooksDir, round_time_to_quarter_hour=False):
     try:
-        today = datetime.now().strftime("%Y %m %d %w %H %M %S")
-        today_short = "{}-{}-{}".format(today.split()[0], today.split()[1], today.split()[2])
+        today_short = datetime.now().strftime("%Y-%m-%d")
         today_file = "{}/{}.md".format(logbooksDir, today_short)
-        with open(today_file) as f, open("commit.tmp","w") as o:
-            print('''## Revisa tu registro de hoy {} antes de publicarlo en Anuko. Las líneas que empiezan
-## con '##' serán ignoradas.\n'''.format(today_short),file=o)
+        with open(today_file) as f, open("commit.tmp","w") as c:
+            c.write('''## Revisa tu registro de hoy {} antes de publicarlo en Anuko. Las líneas que empiezan
+## con '##' serán ignoradas.\n
+##~ Elimina esta línea para confirmar la publicación de este registro ~##\n\n'''.format(today_short))
+            c.write("## DESDE - HASTA   | NOTA\n")
             lines = f.readlines()
             time = '09:00:00'
             for line in lines:
@@ -45,10 +46,44 @@ def print_today(logbooksDir):
                 if i==len(lines)-1: break
                 if lines[i+1]=='---\n': # if this line it's a timestamp:
                     if lines[i+2][0]=='>':    # if there's a note on this timestamp:
-                        previous_time = time #TODO: round time to quarter of an hour
+                        previous_time = time #TODO: optional argument to round time to quarter of an hour
                         time = ''.join( line.split(' ')[4] ) # line.split(' ')[4] takes something like '09:17:43'
-                        print("{} - {}: {}".format(previous_time, time, lines[i+2][2:]),file=o)
+                        c.write("{} - {}: {}".format(previous_time, time, lines[i+2][2:]))
         os.system("vim commit.tmp")
+    except IOError as e:
+        print("error: {}".format(e))
+
+def push_note(start, end, project, client, task, note):
+    r = urllib.request.Request(anuko_url, headers=anuko_cookie)
+    print('{} - {} | project: {}, client: {}, task: {}, note: {}'.format(start, end, project, client, task, note))
+    #WIP
+
+def push_today():
+    print("\033[1m[[ notas del registro de HOY {} para publicar en Anuko: ]]\033[0m\n".format(datetime.now().strftime("%Y-%m-%d")))
+    try:
+        aliases = json.load( open('ttymetracker_aliases.cfg') )
+        with open("commit.tmp") as f:
+            lines = f.readlines()
+            project, client, task = '', '', ''
+            for line in lines:
+                line = line.rstrip() # remove '\n'
+                if line=='##~ Elimina esta línea para confirmar la publicación de este registro ~##':
+                    print('acción cancelada (porque la línea \'##~ ~##\' no fue eliminada)')
+                    os.system("rm commit.tmp")
+                    sys.exit()
+                elif line=='' or line[:2]=='##':
+                    continue
+                for alias in aliases:
+                    if "#{}".format(alias['shorcut']) in line:
+                        project = alias['project']
+                        client = alias['client']
+                        task = alias['task']
+                # from '16:00:00 - 17:00:00: [x] depurar Líneas Base',
+                start = line.split(' - ')[0]   # it takes 16:00:00
+                end = line.split(' - ')[1][:8] # it takes 17:00:00
+                note = line[21:]               # it takes '[x] depurar Líneas Base'
+                push_note(start, end, project, client, task, note)
+        os.system("rm commit.tmp")
     except IOError as e:
         print("error: {}".format(e))
 
@@ -60,8 +95,6 @@ soup = BeautifulSoup(html, 'html.parser')
 clients = soup.findAll( lambda x: x.name=='option' and x.parent.attrs.get('name')=='client')
 projects = soup.findAll( lambda x: x.name=='option' and x.parent.attrs.get('name')=='project')
 tasks = soup.findAll( lambda x: x.name=='option' and x.parent.attrs.get('name')=='task')
-
-aliases = json.load( open('ttymetracker_aliases.cfg') )
 
 '''
 POST /timetracker/time.php HTTP/1.1
