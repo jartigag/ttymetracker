@@ -1,4 +1,4 @@
-modules/ttymetracker_credentials.py
+ttymetracker_credentials.py
 *.bak
 *.tmp
 *.cfg

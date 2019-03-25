@@ -30,6 +30,7 @@ import os, sys
 import re
 import argparse
 from modules.ttymetracker_todo_list import load_lists, print_list, mark_as_completed
+from modules.ttymetracker_anuko import print_today
 
 '''
 Ejemplo de tarea:
@@ -72,7 +73,7 @@ if __name__ == '__main__':
     parser.add_argument('logbooksDir')
     parser.add_argument('-l','--list',action='store_true',
         help='imprimir lista en formato plano')
-    parser.add_argument('-m','--modules',choices=['todo-list'],default='',
+    parser.add_argument('-m','--modules',choices=['todo-list','anuko'],default='',
         help='funcionalidades que se van a cargar')
     args = parser.parse_args()
     logbooksDir = args.logbooksDir
@@ -98,6 +99,9 @@ if __name__ == '__main__':
                     print("[\033[91m!\033[0m] número inválido")
                 print_list(todos, dones)
                 opt = input("Marcar como completada la tarea nº: ")
+        elif 'anuko' in args.modules:
+            print_today(logbooksDir)
+            opt = input("acción: ")
     except KeyboardInterrupt:
         pass
     finally:
