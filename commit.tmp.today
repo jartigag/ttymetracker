@@ -1,0 +1,10 @@
+## Revisa tu registro de hoy {} antes de publicarlo en Anuko.
+## Las líneas que empiezan con '##' serán ignoradas.
+##
+## Las notas con #etiquetas configuradas en /home/javier/ttymetracker/ttymetracker_aliases.cfg se completarán con sus datos correspondientes.
+
+## DESDE - HASTA   | NOTA
+09:00:00 - 10:45:00: [x] Buscar para Luismi cómo poner alias en elastic para filtra por varias subredes a la vez
+10:45:00 - 13:00:00: Depurando #flowbase
+13:00:00 - 13:30:00: `modules/ttymetracker_anuko.py`
+14:00:00 - 14:30:00: Depurando `df_baseline` en #flowbase
