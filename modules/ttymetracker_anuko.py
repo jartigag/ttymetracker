@@ -59,15 +59,15 @@ def push_note(start, end, project, client, task, note):
         #WIP
         html = urllib.request.urlopen(r).read()
         soup = BeautifulSoup(html, 'html.parser')
-        clients = soup.findAll( lambda x: x.name=='option' and x.parent.attrs.get('name')=='client')
-        projects = soup.findAll( lambda x: x.name=='option' and x.parent.attrs.get('name')=='project')
+        #clients = soup.findAll( lambda x: x.name=='option' and x.parent.attrs.get('name')=='client')
+        #projects = soup.findAll( lambda x: x.name=='option' and x.parent.attrs.get('name')=='project')
         #tasks = soup.findAll( lambda x: x.name=='option' and x.parent.attrs.get('name')=='task')
         post_data = 'project=194&task=2&start={}&finish={}&date={}&note={}&btn_submit=Submit'.format(
                     start.replace(':','%3A'), end.replace(':','%3A'), datetime.now().strftime("%Y-%m-%d"), urllib.parse.quote(note)
                 ).encode('utf8')
         #print(post_data.decode('utf8'))
         req = urllib.request.Request(anuko_url, headers=anuko_cookie, data=post_data)
-        ans = urllib.request.urlopen(r)
+        ans = urllib.request.urlopen(req)
         #print(ans.read())
     except Exception as e:
         print("error: {}".format(e))
