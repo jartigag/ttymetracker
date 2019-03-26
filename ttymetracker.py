@@ -31,6 +31,7 @@ import re
 import argparse
 from modules.ttymetracker_todo_list import load_lists, print_list, mark_as_completed
 from modules.ttymetracker_anuko import commit_today, push_today
+from ttymetracker_credentials import *
 
 '''
 Ejemplo de tarea:
@@ -106,6 +107,9 @@ if __name__ == '__main__':
         elif 'anuko' in args.modules:
             commit_today(logbooksDir, aliasesFile)
             push_today(aliasesFile)
+            opt = input("¿Abrir Anuko para revisar estas entradas en el navegador? [S/n]")
+            if opt=='' or opt.lower()=='s':
+                os.system("xdg-open {}".format(anuko_url))
     except KeyboardInterrupt:
         pass
     finally:

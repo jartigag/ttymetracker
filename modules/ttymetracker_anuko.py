@@ -34,9 +34,9 @@ def commit_today(logbooksDir, aliasesFile, round_time_to_quarter_hour=False):
         today_short = datetime.now().strftime("%Y-%m-%d")
         today_file = "{}/{}.md".format(logbooksDir, today_short)
         with open(today_file) as f, open("commit.tmp","w") as c:
-            c.write("## Revisa tu registro de hoy {} antes de publicarlo en Anuko.\n## Las líneas que empiezan con '##' serán ignoradas.\n")
+            c.write("## Revisa tu registro de hoy {} antes de publicarlo en Anuko.\n## Las líneas que empiezan con '##' serán ignoradas.\n".format(today_short))
             if aliasesFile: c.write("##\n## Las notas con #etiquetas configuradas en {} se completarán con sus datos correspondientes.\n".format(aliasesFile))
-            c.write('\n##~ Elimina esta línea para confirmar la publicación de este registro ~##\n\n'.format(today_short))
+            c.write('\n##~ Elimina esta línea para confirmar la publicación de este registro ~##\n\n')
             c.write("## DESDE - HASTA   | NOTA\n")
             lines = f.readlines()
             time = '09:00'
@@ -62,14 +62,14 @@ def push_note(start, end, project, client, task, note):
         #clients = soup.findAll( lambda x: x.name=='option' and x.parent.attrs.get('name')=='client')
         #projects = soup.findAll( lambda x: x.name=='option' and x.parent.attrs.get('name')=='project')
         #tasks = soup.findAll( lambda x: x.name=='option' and x.parent.attrs.get('name')=='task')
-        post_data = 'project=194&task=2&start={}&finish={}&date={}&note={}&btn_submit=Submit'.format(
-                    start.replace(':','%3A'), end.replace(':','%3A'), datetime.now().strftime("%Y-%m-%d"), urllib.parse.quote(note)
+        post_data = 'client={}&project={}&task={}&start={}&finish={}&date={}&note={}&btn_submit=Submit'.format(
+                    client, project, task, start.replace(':','%3A'), end.replace(':','%3A'), datetime.now().strftime("%Y-%m-%d"), urllib.parse.quote(note)
                 ).encode('utf8')
         #print(post_data.decode('utf8'))
         req = urllib.request.Request(anuko_url, headers=anuko_cookie, data=post_data)
         ans = urllib.request.urlopen(req)
         #print(ans.read())
-    except Exception as e:
+    except IOError as e:
         print("error: {}".format(e))
 
 def push_today(aliasesFile):
@@ -81,7 +81,7 @@ def push_today(aliasesFile):
         with open("commit.tmp") as f:
             lines = f.readlines()
             for line in lines:
-                project, client, task = '', '', ''
+                project, client, task = '""', '""', '""'
                 line = line.rstrip() # remove '\n'
                 if line=='##~ Elimina esta línea para confirmar la publicación de este registro ~##':
                     print('acción cancelada (porque la línea \'##~ ~##\' no fue eliminada)')
@@ -91,16 +91,16 @@ def push_today(aliasesFile):
                     continue
                 for alias in aliases:
                     if "#{}".format(alias['shorcut']) in line:
-                        project = alias['project']
-                        client = alias['client']
-                        task = alias['task']
+                        if 'project' in alias: project = alias['project']['value']
+                        if 'client' in alias:  client = alias['client']['value']
+                        if 'task' in alias:    task = alias['task']['value']
                 # from '16:00:00 - 17:00:00: [x] depurar Líneas Base',
                 start = line.split(' - ')[0]   # it takes 16:00
                 end = line.split(' - ')[1][:5] # it takes 17:00
                 note = line[15:]               # it takes '[x] depurar Líneas Base'
                 push_note(start, end, project, client, task, note)
         os.system("rm commit.tmp")
-    except IOError as e:
+    except Exception as e:
         print("error: {}".format(e))
 
 '''
