@@ -30,14 +30,14 @@ import os
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-def commit_today(logbooksDir, round_time_to_quarter_hour=False):
+def commit_today(logbooksDir, aliasesFile, round_time_to_quarter_hour=False):
     try:
         today_short = datetime.now().strftime("%Y-%m-%d")
         today_file = "{}/{}.md".format(logbooksDir, today_short)
         with open(today_file) as f, open("commit.tmp","w") as c:
-            c.write('''## Revisa tu registro de hoy {} antes de publicarlo en Anuko. Las líneas que empiezan
-## con '##' serán ignoradas.\n
-##~ Elimina esta línea para confirmar la publicación de este registro ~##\n\n'''.format(today_short))
+            c.write("## Revisa tu registro de hoy {} antes de publicarlo en Anuko.\n## Las líneas que empiezan con '##' serán ignoradas.\n")
+            if aliasesFile: c.write("##\n## Las notas con #etiquetas configuradas en {} se completarán con sus datos correspondientes.\n".format(aliasesFile))
+            c.write('\n##~ Elimina esta línea para confirmar la publicación de este registro ~##\n\n'.format(today_short))
             c.write("## DESDE - HASTA   | NOTA\n")
             lines = f.readlines()
             time = '09:00:00'
@@ -57,6 +57,14 @@ def push_note(start, end, project, client, task, note):
     r = urllib.request.Request(anuko_url, headers=anuko_cookie)
     print('{} - {} | project: {}, client: {}, task: {}, note: {}'.format(start, end, project, client, task, note))
     #WIP
+    html = urllib.request.urlopen(r).read()
+    soup = BeautifulSoup(html, 'html.parser')
+    clients = soup.findAll( lambda x: x.name=='option' and x.parent.attrs.get('name')=='client')
+    projects = soup.findAll( lambda x: x.name=='option' and x.parent.attrs.get('name')=='project')
+    #tasks = soup.findAll( lambda x: x.name=='option' and x.parent.attrs.get('name')=='task')
+    print('clients:',clients)
+    print('projects:',projects)
+    #print('tasks:',taks)
 
 def push_today(aliasesFile):
     print("\033[1m[[ notas del registro de HOY {} para publicar en Anuko: ]]\033[0m\n".format(datetime.now().strftime("%Y-%m-%d")))

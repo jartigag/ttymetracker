@@ -104,7 +104,7 @@ if __name__ == '__main__':
                 print_list(todos, dones)
                 opt = input("Marcar como completada la tarea nº: ")
         elif 'anuko' in args.modules:
-            commit_today(logbooksDir)
+            commit_today(logbooksDir, aliasesFile)
             push_today(aliasesFile)
     except KeyboardInterrupt:
         pass
