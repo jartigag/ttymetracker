@@ -75,9 +75,12 @@ if __name__ == '__main__':
         help='imprimir lista en formato plano')
     parser.add_argument('-m','--modules',choices=['todo-list','anuko'],default='',
         help='funcionalidades que se van a cargar')
+    parser.add_argument('-a','--aliasesFile',
+            help='fichero JSON (.cfg) que asocia #etiquetas con clientes-proyectos-tareas')
     args = parser.parse_args()
     logbooksDir = args.logbooksDir
     if logbooksDir.endswith('/'): logbooksDir=logbooksDir[:-1]
+    aliasesFile = args.aliasesFile
     try:
         logbooks = sorted([f for f in os.listdir(logbooksDir) if re.match(r'[0-9]+.*\.md', f)])
     except FileNotFoundError:
@@ -102,7 +105,7 @@ if __name__ == '__main__':
                 opt = input("Marcar como completada la tarea nº: ")
         elif 'anuko' in args.modules:
             commit_today(logbooksDir)
-            push_today()
+            push_today(aliasesFile)
     except KeyboardInterrupt:
         pass
     finally:

@@ -58,10 +58,12 @@ def push_note(start, end, project, client, task, note):
     print('{} - {} | project: {}, client: {}, task: {}, note: {}'.format(start, end, project, client, task, note))
     #WIP
 
-def push_today():
+def push_today(aliasesFile):
     print("\033[1m[[ notas del registro de HOY {} para publicar en Anuko: ]]\033[0m\n".format(datetime.now().strftime("%Y-%m-%d")))
     try:
-        aliases = json.load( open('ttymetracker_aliases.cfg') )
+        aliases = []
+        if aliasesFile:
+            aliases = json.load( open(aliasesFile) )
         with open("commit.tmp") as f:
             lines = f.readlines()
             project, client, task = '', '', ''
