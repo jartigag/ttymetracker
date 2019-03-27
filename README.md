@@ -38,7 +38,8 @@ __version__ = "0.4"
 #
 # -- v0.4 --:
 # * --list option
-# * --module anuko
+# * --modules anuko
+# * --aliasesFile
 ```
 
 ### `vim-logbook`, huh?

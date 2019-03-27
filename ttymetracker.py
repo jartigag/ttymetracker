@@ -24,8 +24,8 @@ __version__ = "0.4"
 # * install.sh
 #
 # -- v0.4 --:
-# * --list option
-# * --module anuko
+# * --modules anuko
+# * --aliasesFile
 
 import os, sys
 import re
@@ -102,7 +102,7 @@ if __name__ == '__main__':
                     todos, dones = load_lists(logbooks, logbooksDir)
                     load_files()
                 else:
-                    print("[\033[91m!\033[0m] número inválido")
+                    print("\033[91m[!]\033[0m número inválido")
                 print_list(todos, dones)
                 opt = input("Marcar como completada la tarea nº: ")
         elif 'anuko' in args.modules:
