@@ -50,27 +50,21 @@ def commit_today(logbooksDir, aliasesFile, round_time_to_quarter_hour=False):
                         c.write("{} - {}: {}".format(previous_time, time, lines[i+2][2:]))
         os.system("vim commit.tmp")
     except IOError as e:
-        print("error: {}".format(e))
+        print("\033[91m[!]\033[0m error: {}".format(e))
 
 def push_note(start, end, project, client, task, note):
     try:
         r = urllib.request.Request(anuko_url, headers=anuko_cookie)
-        print('{} - {} {} | {} | project: {}, client: {}, task: {}'.format(start, end, datetime.now().strftime("%Y-%m-%d"), note, project, client, task)) #DEBUGGING
-        #WIP
+        print('[post] {} - {} {} | {} | project: {}, client: {}, task: {}'.format(start, end, datetime.now().strftime("%Y-%m-%d"), note, project, client, task))
         html = urllib.request.urlopen(r).read()
         soup = BeautifulSoup(html, 'html.parser')
-        #clients = soup.findAll( lambda x: x.name=='option' and x.parent.attrs.get('name')=='client')
-        #projects = soup.findAll( lambda x: x.name=='option' and x.parent.attrs.get('name')=='project')
-        #tasks = soup.findAll( lambda x: x.name=='option' and x.parent.attrs.get('name')=='task')
         post_data = 'client={}&project={}&task={}&start={}&finish={}&date={}&note={}&btn_submit=Submit'.format(
                     client, project, task, start.replace(':','%3A'), end.replace(':','%3A'), datetime.now().strftime("%Y-%m-%d"), urllib.parse.quote(note)
                 ).encode('utf8')
-        #print(post_data.decode('utf8'))
         req = urllib.request.Request(anuko_url, headers=anuko_cookie, data=post_data)
         ans = urllib.request.urlopen(req)
-        #print(ans.read())
     except IOError as e:
-        print("error: {}".format(e))
+        print("\033[91m[!]\033[0m error: {}".format(e))
 
 def push_today(aliasesFile):
     print("\033[1m[[ notas del registro de HOY {} para publicar en Anuko: ]]\033[0m\n".format(datetime.now().strftime("%Y-%m-%d")))
@@ -101,15 +95,4 @@ def push_today(aliasesFile):
                 push_note(start, end, project, client, task, note)
         os.system("rm commit.tmp")
     except Exception as e:
-        print("error: {}".format(e))
-
-'''
-$ curl -XPOST 'https://localhost/time.php' -H 'Cookie: tt_login=jartiga; PHPSESSID=o99vjfr7ussbthrllp01jsk2v0; authchallenge=ef8902d732fa23d0c3b8099998265571' --insecure -d '
-client=36&project=194&task=2&start=9%3A00&finish=13%3A30&date=2019-03-26&note=nota2&btn_submit=Submit'
-'''
-'''
-$ curl -XPOST 'https://localhost/time.php' -H 'Cookie: tt_login=jartiga; PHPSESSID=o99vjfr7ussbthrllp01jsk2v0; authchallenge=ef8902d732fa23d0c3b8099998265571' --insecure -d '
-client=49&project=203&task=1&start=9%3A00&finish=13%3A30&date=2019-03-26&note=nota&btn_submit=Submit'
-'''
-#FIXME: client=XX no está funcionando
-#FIXME: task=XX no está cogiendo las tareas esperadas
+        print("\033[91m[!]\033[0m error: {}".format(e))

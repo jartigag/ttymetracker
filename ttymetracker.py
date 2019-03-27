@@ -11,7 +11,7 @@
 # usage: python3 ttymetracker.py logbooksDir --modules [todo-list anuko chrono]
 
 __author__ = "@jartigag"
-__version__ = "0.3"
+__version__ = "0.4"
 
 #changelog:
 #
@@ -25,6 +25,7 @@ __version__ = "0.3"
 #
 # -- v0.4 --:
 # * --list option
+# * --module anuko
 
 import os, sys
 import re
@@ -107,7 +108,7 @@ if __name__ == '__main__':
         elif 'anuko' in args.modules:
             commit_today(logbooksDir, aliasesFile)
             push_today(aliasesFile)
-            opt = input("¿Abrir Anuko para revisar estas entradas en el navegador? [S/n]")
+            opt = input("¿Abrir Anuko para revisar estas entradas en el navegador? [S/n] ")
             if opt=='' or opt.lower()=='s':
                 os.system("xdg-open {}".format(anuko_url))
     except KeyboardInterrupt:

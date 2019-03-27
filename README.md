@@ -24,7 +24,7 @@ and manage your pending and completed tasks.
 # usage: python3 ttymetracker.py logbooksDir --modules [todo-list anuko chrono]
 
 __author__ = "@jartigag"
-__version__ = "0.3"
+__version__ = "0.4"
 
 #changelog:
 #
@@ -35,6 +35,10 @@ __version__ = "0.3"
 # * modularization
 # * exit gracefully
 # * install.sh
+#
+# -- v0.4 --:
+# * --list option
+# * --module anuko
 ```
 
 ### `vim-logbook`, huh?
