@@ -29,7 +29,7 @@ __version__ = "0.4"
 #changelog:
 #
 # -- v0.2 --:
-# * TO-DO list
+# * --modules todo-list
 #
 # -- v0.3 --:
 # * modularization
@@ -37,13 +37,13 @@ __version__ = "0.4"
 # * install.sh
 #
 # -- v0.4 --:
-# * --list option
+# * --list
 # * --modules anuko
 # * --aliasesFile
 ```
 
 ### `vim-logbook`, huh?
-this tool uses the [vim-logbook](https://github.com/jamesroutley/vim-logbook) system, explained in its readme and in its [blogpost](https://routley.io/tech/2017/11/23/logbook.html).  
+this tool uses the [vim-logbook](https://github.com/jamesroutley/vim-logbook) system by [james routley](https://routley.io/), explained on his project's readme and on his [blogpost](https://routley.io/tech/2017/11/23/logbook.html).  
 [i forked it](https://github.com/jartigag/vim-logbook) and tweaked it a little.
 
 **vim-logbook** simply helps you to log your activity in [.md](https://en.wikipedia.org/wiki/Markdown) files, like this:
@@ -75,6 +75,7 @@ python tool.py --regenerate_databases
 
 ### `ttymetracker`, huh?
 **ttymetracker** prints all your .md files from a specific logbook/ directory.  
+there are several modules which load different features.  
 for example, along with ttymetracker's `todo-list` module, it would look like that:
 ```
 $ python3 ttymetracker.py -m todo-list ~/logbook
@@ -90,6 +91,7 @@ lun 04 mar 2019
 16:59:34 > Completada la actualización de las bases de datos
 
 [[ lista de TO-DOs: ]]
+
 0.[ ] depurar los scripts que nos han pasado
 *****
 13 tareas completadas

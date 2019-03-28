@@ -55,7 +55,7 @@ def load_lists(logbooks, logbooksDir):
     return todos, dones
 
 def print_list(todos, dones):
-    print("\033[1m[[ lista de TO-DOs: ]]\033[0m")
+    print("\033[1m[[ lista de TO-DOs: ]]\033[0m\n")
     for t in todos: print("{}.{}".format(todos.index(t),t))
     print("*****")
     print("{} tareas completadas".format(len(dones)))

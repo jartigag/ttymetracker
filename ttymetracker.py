@@ -16,7 +16,7 @@ __version__ = "0.4"
 #changelog:
 #
 # -- v0.2 --:
-# * TO-DO list
+# * --modules todo-list
 #
 # -- v0.3 --:
 # * modularization
@@ -24,6 +24,7 @@ __version__ = "0.4"
 # * install.sh
 #
 # -- v0.4 --:
+# * --list
 # * --modules anuko
 # * --aliasesFile
 
