@@ -84,7 +84,7 @@ def push_today(aliasesFile):
                 elif line=='' or line[:2]=='##':
                     continue
                 for alias in aliases:
-                    if "#{}".format(alias['shorcut']) in line:
+                    if "#{}".format(alias['shorcut']) in line.lower():
                         if 'project' in alias: project = alias['project']['value']
                         if 'client' in alias:  client = alias['client']['value']
                         if 'task' in alias:    task = alias['task']['value']
