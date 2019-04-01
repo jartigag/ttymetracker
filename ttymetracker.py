@@ -61,7 +61,7 @@ def load_files(listFormat):
                                     if day[:3]=='lun':
                                         print("=====\n")
                                     print('\033[4m{}\033[0m'.format(day))
-                            timestamp = line[-13:-4] # this takes something like '15:05:54'
+                            timestamp = ':'.join([ line.split(':')[0][-2:], line.split(':')[1], line.split(':')[2][:2] ]) # this takes something like '10:23:01'
                         if not listFormat:
                             print('{}{}'.format(timestamp,lines[i+2])) # print timestamp and note
                         else:
