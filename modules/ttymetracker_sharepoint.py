@@ -12,7 +12,74 @@
 __author__ = "@jartigag"
 __version__ = "0.5"
 
+import urllib.request, urllib.parse
+from ttymetracker_credentials import *
+import json
+
 ### TODO ###
+#
+#wip:
+# Traceback (most recent call last):
+#   File "modules/ttymetracker_sharepoint.py", line 62, in <module>
+#     post_data = json.dumps(post_data).format(sharepoint_email, sharepoint_display_name).encode('utf8')
+# KeyError: '"formValues"'
+#
+#todo1: post task with the minimal data and headers
+
+#post_data = {"formValues": [{"FieldName": "Title"},{"FieldName": "Fecha"}]}
+post_data = {"cosa": "valor de cosa"}
+
+#FIXME: https://stackoverflow.com/q/16356810
+
+'''
+post_data = {
+    "formValues": [
+    {
+      "FieldName": "Title",
+      "FieldValue": "prueba desde modules/ttymetracker_sharepoint.py",
+      "HasException": False,
+      "ErrorMessage": None
+    },
+    {
+      "FieldName": "Fecha",
+      "FieldValue": "01/04/2019",
+      "HasException": False,
+      "ErrorMessage": None
+    },
+    {
+      "FieldName": "Horas",
+      "FieldValue": "1",
+      "HasException": False,
+      "ErrorMessage": None
+    },
+    {
+      "FieldName": "Usuario",
+      "FieldValue": "[{\"Key\":\"i:0#.f|membership|{}\",\"DisplayText\":\"{}\",\"IsResolved\":true,\"Description\":\"{}\",\"EntityType\":\"User\",\"EntityData\":{\"IsAltSecIdPresent\":\"False\",\"Title\":\"\",\"Email\":\"{}\",\"MobilePhone\":\"\",\"ObjectId\":\"14308d04-61bc-40d2-98b1-fee3accf077d\",\"Department\":\"\"},\"MultipleMatches\":[],\"ProviderName\":\"Tenant\",\"ProviderDisplayName\":\"Espacio empresarial\"}]",
+      "HasException": False,
+      "ErrorMessage": None
+    },
+    {
+      "FieldName": "Proyecto",
+      "FieldValue": "9;#Otros",
+      "HasException": False,
+      "ErrorMessage": None
+    },
+    {
+      "FieldName": "ContentType",
+      "FieldValue": "Elemento",
+      "HasException": False,
+      "ErrorMessage": None
+    }],
+    "bNewDocumentUpdate": False,
+    "checkInComment": None
+    }
+'''
+print(json.dumps(post_data))
+post_data = json.dumps(post_data).format(sharepoint_email, sharepoint_display_name).encode('utf8')
+req = urllib.request.Request(sharepoint_url, headers=sharepoint_cookie, data=post_data)
+ans = urllib.request.urlopen(req)
+print(ans)
+
 
 '''
 curl 'https://myCompany.sharepoint.com/sites/administracion2/_api/web/GetList(@a1)/AddValidateUpdateItemUsingPath()?@a1=%27%2Fsites%2Fadministracion2%2FLists%2FHoras%5FJA%27'

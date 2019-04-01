@@ -61,7 +61,7 @@ def push_note(start, end, project, client, task, note):
         post_data = 'client={}&project={}&task={}&start={}&finish={}&date={}&note={}&btn_submit=Submit'.format(
                     client, project, task, start.replace(':','%3A'), end.replace(':','%3A'), datetime.now().strftime("%Y-%m-%d"), urllib.parse.quote(note)
                 ).encode('utf8')
-        req = urllib.request.Request(anuko_url, headers=anuko_cookie, data=post_data)
+        req = urllib.request.Request(anuko_url, headers=anuko_headers, data=post_data)
         ans = urllib.request.urlopen(req)
     except IOError as e:
         print("\033[91m[!]\033[0m error: {}".format(e))
