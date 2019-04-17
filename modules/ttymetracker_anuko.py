@@ -45,7 +45,12 @@ def commit_today(logbooksDir, aliasesFile, round_time_to_quarter_hour=False):
                 if i==len(lines)-1: break
                 if lines[i+1]=='---\n': # if this line it's a timestamp:
                     if lines[i+2][0]=='>':    # if there's a note on this timestamp:
-                        previous_time = time #TODO: optional argument to round time to quarter of an hour
+                        #TODO: optional argument to round time to quarter of an hour. possible implementations:
+                        #   1 - use dictionaries https://superuser.com/a/102359
+                        #           set dictionary+=~/ttymetracker/modules/dict_round_time.txt
+                        #   2 - use regex and commands http://vim.1045645.n5.nabble.com/rounding-numbers-td3339491.html
+                        #           :%s/.../\=float2nr(round(str2float(substitute(submatch(1), ',', '.', '')))) # this rounds decimals
+                        previous_time = time
                         time = ''.join( line.split(' ')[4][:-3] ) # line.split(' ')[4] takes something like '09:17'
                         c.write("{} - {}: {}".format(previous_time, time, lines[i+2][2:]))
         os.system("vim commit.tmp")
