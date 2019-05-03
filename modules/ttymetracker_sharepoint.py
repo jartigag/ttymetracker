@@ -7,6 +7,7 @@
 #
 # this module for ttymetracker copies your tasks to your 
 # MS SharePoint sheet
+#
 # usage: python3 ttymetracker.py logbooksDir --modules sharepoint 
 
 __author__ = "@jartigag"
