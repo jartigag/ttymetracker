@@ -37,6 +37,7 @@ def commit_today(logbooksDir, aliasesFile):
         with open(today_file) as f, open("commit.tmp","w") as c:
             c.write("## Revisa tu registro de hoy {} antes de publicarlo en Anuko.\n## Las líneas que empiezan con '##' serán ignoradas.\n".format(today_short))
             if aliasesFile: c.write("##\n## Las notas con #etiquetas configuradas en {} se completarán con sus datos correspondientes.\n".format(aliasesFile))
+            c.write("## En Vim, ejecuta :Round para redondear los tiempos al cuarto de hora (ejemplo: 00:17 -> 00:15).\n")
             c.write('\n##~ Elimina esta línea para confirmar la publicación de este registro ~##\n\n')
             c.write("## DESDE - HASTA   | NOTA\n")
             lines = f.readlines()

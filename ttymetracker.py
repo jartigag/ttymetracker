@@ -11,7 +11,7 @@
 # usage: python3 ttymetracker.py logbooksDir --modules [todo-list anuko chrono]
 
 __author__ = "@jartigag"
-__version__ = "0.4"
+__version__ = "0.5"
 
 #changelog:
 #
@@ -27,11 +27,14 @@ __version__ = "0.4"
 # * --list
 # * --modules anuko
 # * --aliasesFile
+#
+# -- v0.5 --:
+# * start/stop session in todo-list
 
 import os, sys
 import re
 import argparse
-from modules.ttymetracker_todo_list import load_lists, print_list, mark_as_completed
+from modules.ttymetracker_todo_list import load_lists, print_list, mark_as_completed, session_event
 from modules.ttymetracker_anuko import commit_today, push_today
 from ttymetracker_credentials import *
 
@@ -102,6 +105,10 @@ if __name__ == '__main__':
                     print("La tarea {}:\n\t\033[1m{}\033[0m\nse ha marcado como completada\n".format(opt,todos[int(opt)]))
                     todos, dones = load_lists(logbooks, logbooksDir)
                     load_files()
+                elif opt=='s':
+                    session_event(logbooksDir, "start")
+                elif opt=='S':
+                    session_event(logbooksDir, "end")
                 else:
                     print("\033[91m[!]\033[0m número inválido")
                 print_list(todos, dones)

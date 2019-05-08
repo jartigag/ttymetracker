@@ -11,7 +11,12 @@
 # usage: python3 ttymetracker.py logbooksDir --modules todo-list
 
 __author__ = "@jartigag"
-__version__ = "0.2"
+__version__ = "0.5"
+
+# changelog:
+#
+# -- v0.5 --:
+# * start/stop session in todo-list
 
 import os
 from datetime import datetime
@@ -93,3 +98,22 @@ def mark_as_completed(i, todos, logbooksDir):
         #---
         f.write(timestamp)
         f.write("> [x] {}\n".format(todos[i][4:].split(" ( desde")[0])) # from '[ ] Tarea de prueba ( desde vie 09 mar 2019 )', it takes 'Tarea de prueba'
+
+def session_event(logbooksDir, event):
+    today = datetime.now().strftime("%Y %m %d %w %H %M %S")
+    today_file = "{}/{}-{}-{}.md".format(logbooksDir, today.split()[0], today.split()[1], today.split()[2])
+    with open(today_file, "a") as f:
+        timestamp = "\n{} {} {} {} {}:{}:{} CET\n---\n".format(
+            weekdays_dict[today.split()[3]], today.split()[2],
+            list(months_dict.keys())[list(months_dict.values()).index(today.split()[1])], # what a hack to get a key by its value in a dict, huh? 😜
+            today.split()[0], today.split()[4], today.split()[5], today.split()[6]
+        )
+        # timestamp is something like:
+        #
+        #vie 09 mar 2019 15:28:01 CET
+        #---
+        f.write(timestamp)
+        if event=="start":
+            f.write("\nInicio de sesión")
+        elif event=="end":
+            f.write("\nFin de sesión")
