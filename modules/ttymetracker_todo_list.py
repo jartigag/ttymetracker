@@ -114,6 +114,6 @@ def session_event(logbooksDir, event):
         #---
         f.write(timestamp)
         if event=="start":
-            f.write("\nInicio de sesión")
+            f.write("> Inicio de sesión\n")
         elif event=="end":
-            f.write("\nFin de sesión")
+            f.write("> Fin de sesión\n")

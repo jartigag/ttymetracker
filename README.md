@@ -40,6 +40,9 @@ __version__ = "0.4"
 # * --list
 # * --modules anuko
 # * --aliasesFile
+#
+# -- v0.5 --:
+# * start/stop session from todo-list
 ```
 
 ### `vim-logbook`, huh?

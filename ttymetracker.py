@@ -29,7 +29,7 @@ __version__ = "0.5"
 # * --aliasesFile
 #
 # -- v0.5 --:
-# * start/stop session in todo-list
+# * start/stop session from todo-list
 
 import os, sys
 import re
@@ -99,20 +99,25 @@ if __name__ == '__main__':
             todos, dones = load_lists(logbooks, logbooksDir)
             print_list(todos, dones)
             opt = input("Marcar como completada la tarea nº: ")
-            while opt!='':
+            try:
                 if int(opt)<len(todos) and int(opt)>=0: # that is, `opt` is a valid index of `todos`
                     mark_as_completed(int(opt), todos, logbooksDir)
                     print("La tarea {}:\n\t\033[1m{}\033[0m\nse ha marcado como completada\n".format(opt,todos[int(opt)]))
                     todos, dones = load_lists(logbooks, logbooksDir)
                     load_files()
-                elif opt=='s':
+                else:
+                    raise ValueError
+            except ValueError:
+                if opt=='s':
                     session_event(logbooksDir, "start")
+                    print("\033[1mSesión iniciada\033[0m")
                 elif opt=='S':
                     session_event(logbooksDir, "end")
+                    print("\033[1mSesión terminada\033[0m")
+                elif opt=='':
+                    pass
                 else:
                     print("\033[91m[!]\033[0m número inválido")
-                print_list(todos, dones)
-                opt = input("Marcar como completada la tarea nº: ")
         elif 'anuko' in args.modules:
             commit_today(logbooksDir, aliasesFile)
             push_today(aliasesFile)
