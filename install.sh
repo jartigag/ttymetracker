@@ -14,9 +14,9 @@ if [[ $# -eq 0 ]] ; then
 fi
 
 if [[ "$1"==/* ]]; then # if $1 it's an absolute path
-	logbookDir=$1
+    logbookDir=$1
 else
-	logbookDir="$PWD/$1"
+    logbookDir="$PWD/$1"
 fi
 mkdir -p $logbookDir
 
@@ -36,13 +36,19 @@ cp -r install/vim-logbook/* ~/.vim/plugged/vim-logbook/
 echo '2. añadiendo algunos alias de bash útiles: "lb" y "tmt"..'
 echo "
 lb() {
-	vim $logbookDir/$(date '+%Y-%m-%d').md
-}
-tmtl () {
-	python3 $PWD/ttymetracker.py $logbookDir
+    vim $logbookDir/$(date '+%Y-%m-%d').md
 }
 tmt () {
-	python3 $PWD/ttymetracker.py $logbookDir -m todo-list
+    echo -ne "\033]30;tmt ⏱\007"
+    python3 $PWD/ttymetracker.py $logbookDir -m todo-list
+}
+tmtl () {
+    echo -ne "\033]30;tmtl ⏱L\007"
+    python3 ~/ttymetracker/ttymetracker.py $logbookDir -l
+}
+tmta () {
+    echo -ne "\033]30;tmta ⏱🡅\007"
+    python3 $PWD/ttymetracker.py $logbookDir -m anuko -a ~/ttymetracker/ttymetracker_aliases.cfg
 }
 " | tee -a ~/.bash_aliases > /dev/null
 
@@ -56,7 +62,7 @@ Aquí va una descripción más detallada de lo que has hecho en la
 primera entrada de tu logbook. Quizás quieras usar **negrita**, [enlaces](https://jartigag.xyz),
 \`\`\`
 if youWant==True:
-	print(\"fragmentos de código\")
+    print(\"fragmentos de código\")
 \`\`\`
 o cualquier otro de los recursos que permite [Markdown](https://es.wikipedia.org/wiki/Markdown), el lenguaje de marcado ligero ;)
 
