@@ -85,8 +85,6 @@ def mark_as_completed(i, todos, logbooksDir):
     today = datetime.now().strftime("%Y %m %d %w %H %M %S")
     today_file = "{}/{}-{}-{}.md".format(logbooksDir, today.split()[0], today.split()[1], today.split()[2])
     with open(today_file, "a") as f:
-        print('today:',today)
-        print('today_file', today_file)
         timestamp = "\n{} {} {} {} {}:{}:{} CET\n---\n".format(
             weekdays_dict[today.split()[3]], today.split()[2],
             list(months_dict.keys())[list(months_dict.values()).index(today.split()[1])], # what a hack to get a key by its value in a dict, huh? 😜
