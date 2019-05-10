@@ -37,6 +37,7 @@ import argparse
 from modules.ttymetracker_todo_list import load_lists, print_list, mark_as_completed, session_event
 from modules.ttymetracker_anuko import commit_today, push_today
 from ttymetracker_credentials import *
+from time import sleep
 
 '''
 Ejemplo de tarea:
@@ -88,44 +89,48 @@ if __name__ == '__main__':
     if logbooksDir.endswith('/'): logbooksDir=logbooksDir[:-1]
     aliasesFile = args.aliasesFile
     try:
-        logbooks = sorted([f for f in os.listdir(logbooksDir) if re.match(r'[0-9]+.*\.md', f)])
-    except FileNotFoundError:
-        print('"{}" no existe'.format(logbooksDir))
-        print("\ntaluego!")
-        sys.exit(-1)
-    try:
-        load_files(args.list)
-        if 'todo-list' in args.modules:
-            todos, dones = load_lists(logbooks, logbooksDir)
-            print_list(todos, dones)
-            opt = input("Marcar como completada la tarea nº: ")
+        while True:
             try:
-                if int(opt)<len(todos) and int(opt)>=0: # that is, `opt` is a valid index of `todos`
-                    mark_as_completed(int(opt), todos, logbooksDir)
-                    print("La tarea {}:\n\t\033[1m{}\033[0m\nse ha marcado como completada\n".format(opt,todos[int(opt)]))
-                    todos, dones = load_lists(logbooks, logbooksDir)
-                    load_files()
-                else:
-                    raise ValueError
-            except ValueError:
-                if opt=='s':
-                    session_event(logbooksDir, "start")
-                    print("\033[1mSesión iniciada\033[0m")
-                elif opt=='S':
-                    session_event(logbooksDir, "end")
-                    print("\033[1mSesión terminada\033[0m")
-                elif opt=='':
-                    pass
-                else:
-                    print("\033[91m[!]\033[0m número inválido")
-        elif 'anuko' in args.modules:
-            commit_today(logbooksDir, aliasesFile)
-            push_today(aliasesFile)
-            opt = input("¿Abrir Anuko para revisar estas entradas en el navegador? [S/n] ")
-            if opt=='' or opt.lower()=='s':
-                os.system("xdg-open {}".format(anuko_url))
+                logbooks = sorted([f for f in os.listdir(logbooksDir) if re.match(r'[0-9]+.*\.md', f)])
+            except FileNotFoundError:
+                print('"{}" no existe'.format(logbooksDir))
+                print("\ntaluego!")
+                sys.exit(-1)
+            load_files(args.list)
+            if 'todo-list' in args.modules:
+                todos, dones = load_lists(logbooks, logbooksDir)
+                print_list(todos, dones)
+                opt = input("Marcar como completada la tarea nº: ")
+                try:
+                    if int(opt)<len(todos) and int(opt)>=0: # that is, `opt` is a valid index of `todos`
+                        mark_as_completed(int(opt), todos, logbooksDir)
+                        print("La tarea {}:\n\t\033[1m{}\033[0m\nse ha marcado como completada\n".format(opt,todos[int(opt)]))
+                        todos, dones = load_lists(logbooks, logbooksDir)
+                        load_files()
+                    else:
+                        raise ValueError
+                except ValueError:
+                    if opt=='s':
+                        session_event(logbooksDir, "start")
+                        print("\033[1mSesión iniciada\033[0m")
+                    elif opt=='S':
+                        session_event(logbooksDir, "end")
+                        print("\033[1mSesión terminada\033[0m")
+                    elif opt=='':
+                        pass
+                    else:
+                        print("\033[91m[!]\033[0m número inválido")
+                    print("\033[1mRecargando..\033[0m")
+                    sleep(0.5)
+            elif 'anuko' in args.modules:
+                commit_today(logbooksDir, aliasesFile)
+                push_today(aliasesFile)
+                opt = input("¿Abrir Anuko para revisar estas entradas en el navegador? [S/n] ")
+                if opt=='' or opt.lower()=='s':
+                    os.system("xdg-open {}".format(anuko_url))
     except KeyboardInterrupt:
-        pass
-    finally:
         print("\ntaluego!")
         sys.exit(0)
+    except Exception:
+        print("\ntaluego!")
+        sys.exit()
