@@ -30,6 +30,7 @@ __version__ = "0.5"
 #
 # -- v0.5 --:
 # * start/stop session from todo-list
+# * while True
 
 import os, sys
 import re

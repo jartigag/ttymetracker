@@ -43,6 +43,7 @@ __version__ = "0.4"
 #
 # -- v0.5 --:
 # * start/stop session from todo-list
+# * while True
 ```
 
 ### `vim-logbook`, huh?
