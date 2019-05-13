@@ -128,9 +128,12 @@ if __name__ == '__main__':
                 opt = input("¿Abrir Anuko para revisar estas entradas en el navegador? [S/n] ")
                 if opt=='' or opt.lower()=='s':
                     os.system("xdg-open {}".format(anuko_url))
+                    sys.exit()
+            else:
+                syst.exit()
     except KeyboardInterrupt:
         print("\ntaluego!")
-        sys.exit(0)
+        sys.exit()
     except Exception:
         print("\ntaluego!")
         sys.exit()
