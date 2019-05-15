@@ -107,7 +107,7 @@ if __name__ == '__main__':
                         mark_as_completed(int(opt), todos, logbooksDir)
                         print("La tarea {}:\n\t\033[1m{}\033[0m\nse ha marcado como completada\n".format(opt,todos[int(opt)]))
                         todos, dones = load_lists(logbooks, logbooksDir)
-                        load_files()
+                        load_files(args.list)
                     else:
                         raise ValueError
                 except ValueError:
