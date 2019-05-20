@@ -153,6 +153,7 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         print("\ntaluego!")
         sys.exit()
-    except Exception:
+    except Exception as e:
+        print("\033[91m[!]\033[0m {}".format(e))
         print("\ntaluego!")
         sys.exit()
