@@ -21,7 +21,7 @@ and manage your pending and completed tasks.
 # basically a script to list the tasks you wrote down in your logbook directory
 # and manage them with some modules, like the todo-list one.
 #
-# usage: python3 ttymetracker.py logbooksDir --modules [todo-list anuko chrono]
+# usage: python3 ttymetracker.py logbooksDir --modules [todo-list anuko sharepoint]
 
 __author__ = "@jartigag"
 __version__ = "0.6"
