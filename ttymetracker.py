@@ -134,7 +134,7 @@ if __name__ == '__main__':
                 modules.ttymetracker_anuko.push_today(aliasesFile)
                 opt = input("¿Abrir Anuko para revisar estas entradas en el navegador? [S/n] ")
                 if opt=='' or opt.lower()=='s':
-                    os.system("xdg-open {}".format(anuko_url))
+                    os.system("xdg-open '{}'".format(anuko_url))
                 sys.exit()
             elif 'sharepoint' in args.modules:
                 ctxAuth = AuthenticationContext(sharepoint_url)
@@ -144,7 +144,7 @@ if __name__ == '__main__':
                     modules.ttymetracker_sharepoint.push_today(ctx, aliasesFile)
                     opt = input("¿Abrir Sharepoint para revisar estas entradas en el navegador? [S/n] ")
                     if opt=='' or opt.lower()=='s':
-                        os.system("xdg-open {}".format(sharepoint_check_url))
+                        os.system("xdg-open '{}'".format(sharepoint_check_url))
                 else:
                     print(ctxAuth.get_last_error())
                 sys.exit()
