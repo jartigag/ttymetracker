@@ -135,7 +135,7 @@ if __name__ == '__main__':
                 opt = input("¿Abrir Anuko para revisar estas entradas en el navegador? [S/n] ")
                 if opt=='' or opt.lower()=='s':
                     os.system("xdg-open {}".format(anuko_url))
-                    sys.exit()
+                sys.exit()
             elif 'sharepoint' in args.modules:
                 ctxAuth = AuthenticationContext(sharepoint_url)
                 if ctxAuth.acquire_token_for_user(sharepoint_username, sharepoint_password):
@@ -145,10 +145,9 @@ if __name__ == '__main__':
                     opt = input("¿Abrir Sharepoint para revisar estas entradas en el navegador? [S/n] ")
                     if opt=='' or opt.lower()=='s':
                         os.system("xdg-open {}".format(sharepoint_check_url))
-                        sys.exit()
                 else:
                     print(ctxAuth.get_last_error())
-                    sys.exit()
+                sys.exit()
             else:
                 syst.exit()
     except KeyboardInterrupt:

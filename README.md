@@ -24,7 +24,7 @@ and manage your pending and completed tasks.
 # usage: python3 ttymetracker.py logbooksDir --modules [todo-list anuko chrono]
 
 __author__ = "@jartigag"
-__version__ = "0.4"
+__version__ = "0.6"
 
 #changelog:
 #
@@ -44,6 +44,9 @@ __version__ = "0.4"
 # -- v0.5 --:
 # * start/stop session from todo-list
 # * while True
+#
+# -- v0.6 --:
+# * --modules sharepoint
 ```
 
 ### `vim-logbook`, huh?

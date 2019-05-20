@@ -50,6 +50,10 @@ tmta () {
     echo -ne "\033]30;tmta ⏱🡅\007"
     python3 $PWD/ttymetracker.py $logbookDir -m anuko -a ~/ttymetracker/ttymetracker_aliases.cfg
 }
+tmts () {
+    echo -ne "\033]30;tmts ⏱🡅\007"
+    python3 $PWD/ttymetracker.py $logbookDir -m sharepoint -a ~/ttymetracker/ttymetracker_aliases.cfg
+}
 " | tee -a ~/.bash_aliases > /dev/null
 
 echo "3. se incluirá algún fichero logbook de ejemplo.."
