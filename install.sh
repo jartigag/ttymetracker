@@ -33,7 +33,7 @@ call plug#end()
 mkdir -p ~/.vim ~/.vim/plugged ~/.vim/plugged/vim-logbook
 cp -r install/vim-logbook/* ~/.vim/plugged/vim-logbook/
 
-echo '2. añadiendo algunos alias de bash útiles: "lb" y "tmt"..'
+echo '2. añadiendo algunos alias de bash útiles: "lb", "tmt", "tmts"..'
 echo "
 lb() {
     vim $logbookDir/$(date '+%Y-%m-%d').md
@@ -79,6 +79,9 @@ $(date +%c --date="+3 minutes")
 " > $logbookDir/$(date '+%Y-%m-%d').md
 echo "$logbookDir/$(date '+%Y-%m-%d').md"
 echo "(puedes sobreescribir este fichero luego)"
+
+echo '4. instalando dependencias de python (librerías "beautifulsoup4" y "Office365-REST-Python-Client")..'
+pip3 install -r requeriments.txt
 
 echo ''
 echo 'hecho! pruébalo escribiendo "tmt" en tu terminal (primero recarga tus alias de bash ejecutando ". ~/.bashrc")'
