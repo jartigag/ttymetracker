@@ -149,7 +149,7 @@ if __name__ == '__main__':
                     print(ctxAuth.get_last_error())
                 sys.exit()
             else:
-                syst.exit()
+                sys.exit()
     except KeyboardInterrupt:
         print("\ntaluego!")
         sys.exit()
