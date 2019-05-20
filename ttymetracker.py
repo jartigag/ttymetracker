@@ -8,10 +8,10 @@
 # basically a script to list the tasks you wrote down in your logbook directory
 # and manage them with some modules, like the todo-list one.
 #
-# usage: python3 ttymetracker.py logbooksDir --modules [todo-list anuko chrono]
+# usage: python3 ttymetracker.py logbooksDir --modules [todo-list anuko sharepoint]
 
 __author__ = "@jartigag"
-__version__ = "0.5"
+__version__ = "0.6"
 
 #changelog:
 #
@@ -31,14 +31,20 @@ __version__ = "0.5"
 # -- v0.5 --:
 # * start/stop session from todo-list
 # * while True
+#
+# -- v0.6 --:
+# * --modules sharepoint
 
 import os, sys
 import re
 import argparse
 from modules.ttymetracker_todo_list import load_lists, print_list, mark_as_completed, session_event
-from modules.ttymetracker_anuko import commit_today, push_today
+import modules.ttymetracker_anuko
+import modules.ttymetracker_sharepoint
 from ttymetracker_credentials import *
 from time import sleep
+from office365.runtime.auth.authentication_context import AuthenticationContext
+from office365.sharepoint.client_context import ClientContext
 
 '''
 Ejemplo de tarea:
@@ -81,7 +87,7 @@ if __name__ == '__main__':
     parser.add_argument('logbooksDir')
     parser.add_argument('-l','--list',action='store_true',
         help='imprimir lista en formato plano')
-    parser.add_argument('-m','--modules',choices=['todo-list','anuko'],default='',
+    parser.add_argument('-m','--modules',choices=['todo-list','anuko','sharepoint'],default='',
         help='funcionalidades que se van a cargar')
     parser.add_argument('-a','--aliasesFile',
             help='fichero JSON (.cfg) que asocia #etiquetas con clientes-proyectos-tareas')
@@ -124,11 +130,24 @@ if __name__ == '__main__':
                     print("\033[1mRecargando..\033[0m")
                     sleep(0.5)
             elif 'anuko' in args.modules:
-                commit_today(logbooksDir, aliasesFile)
-                push_today(aliasesFile)
+                modules.ttymetracker_anuko.commit_today(logbooksDir, aliasesFile)
+                modules.ttymetracker_anuko.push_today(aliasesFile)
                 opt = input("¿Abrir Anuko para revisar estas entradas en el navegador? [S/n] ")
                 if opt=='' or opt.lower()=='s':
                     os.system("xdg-open {}".format(anuko_url))
+                    sys.exit()
+            elif 'sharepoint' in args.modules:
+                ctxAuth = AuthenticationContext(sharepoint_url)
+                if ctxAuth.acquire_token_for_user(sharepoint_username, sharepoint_password):
+                    ctx = ClientContext(sharepoint_url, ctxAuth)
+                    modules.ttymetracker_sharepoint.commit_today(logbooksDir, aliasesFile)
+                    modules.ttymetracker_sharepoint.push_today(ctx, aliasesFile)
+                    opt = input("¿Abrir Sharepoint para revisar estas entradas en el navegador? [S/n] ")
+                    if opt=='' or opt.lower()=='s':
+                        os.system("xdg-open {}".format(sharepoint_check_url))
+                        sys.exit()
+                else:
+                    print(ctxAuth.get_last_error())
                     sys.exit()
             else:
                 syst.exit()
