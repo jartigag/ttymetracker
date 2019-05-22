@@ -115,3 +115,7 @@ def session_event(logbooksDir, event):
             f.write("> Inicio de sesión\n")
         elif event=="end":
             f.write("> Fin de sesión\n")
+        elif event=="start_pause":
+            f.write("> Inicio pausa\n")
+        elif event=="end_pause":
+            f.write("> Fin pausa\n")

@@ -34,6 +34,7 @@ __version__ = "0.6"
 #
 # -- v0.6 --:
 # * --modules sharepoint
+# * pause session from todo-list
 
 import os, sys
 import re
@@ -123,6 +124,12 @@ if __name__ == '__main__':
                     elif opt=='S':
                         session_event(logbooksDir, "end")
                         print("\033[1mSesión terminada\033[0m")
+                    elif opt=='p':
+                        session_event(logbooksDir, "start_pause")
+                        print("\033[1mInicio pausa\033[0m")
+                    elif opt=='P':
+                        session_event(logbooksDir, "end_pause")
+                        print("\033[1mFin pausa\033[0m")
                     elif opt=='':
                         pass
                     else:
