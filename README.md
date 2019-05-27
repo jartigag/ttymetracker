@@ -47,6 +47,10 @@ __version__ = "0.6"
 #
 # -- v0.6 --:
 # * --modules sharepoint
+# * pause session from todo-list
+#
+# -- v0.7 --:
+# * --git
 ```
 
 ### `vim-logbook`, huh?

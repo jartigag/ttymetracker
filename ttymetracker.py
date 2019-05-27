@@ -35,6 +35,9 @@ __version__ = "0.6"
 # -- v0.6 --:
 # * --modules sharepoint
 # * pause session from todo-list
+#
+# -- v0.7 --:
+# * --git
 
 import os, sys
 import re
@@ -92,20 +95,23 @@ if __name__ == '__main__':
         help='funcionalidades que se van a cargar')
     parser.add_argument('-a','--aliasesFile',
             help='fichero JSON (.cfg) que asocia #etiquetas con clientes-proyectos-tareas')
+    parser.add_argument('-g','--git',
+            help='')
     args = parser.parse_args()
     logbooksDir = args.logbooksDir
     if logbooksDir.endswith('/'): logbooksDir=logbooksDir[:-1]
     aliasesFile = args.aliasesFile
     try:
-        while True:
-            try:
-                logbooks = sorted([f for f in os.listdir(logbooksDir) if re.match(r'[0-9]+.*\.md', f)])
-            except FileNotFoundError:
-                print('"{}" no existe'.format(logbooksDir))
-                print("\ntaluego!")
-                sys.exit(-1)
-            load_files(args.list)
-            if 'todo-list' in args.modules:
+        logbooks = sorted([f for f in os.listdir(logbooksDir) if re.match(r'[0-9]+.*\.md', f)])
+        load_files(args.list)
+        if args.git:
+            pass
+            #WIP: `cd args.logbook`
+            #WIP: if not .git/: `git init && git remote add origin $git_remoteURL && git pull origin master`
+            #WIP: if not .gitignore: add "ttymetracker_credentials.py; *.tmp; *.cfg" to .gitignore
+            #WIP: if gitconfig local != ($git_config_name & $git_config_email): gitconfig local
+        if 'todo-list' in args.modules:
+            while True:
                 todos, dones = load_lists(logbooks, logbooksDir)
                 print_list(todos, dones)
                 opt = input("Marcar como completada la tarea nº: ")
@@ -136,13 +142,13 @@ if __name__ == '__main__':
                         print("\033[91m[!]\033[0m número inválido")
                     print("\033[1mRecargando..\033[0m")
                     sleep(0.5)
-            elif 'anuko' in args.modules:
+        elif 'anuko' or 'sharepoint' in args.modules:
+            if 'anuko' in args.modules:
                 modules.ttymetracker_anuko.commit_today(logbooksDir, aliasesFile)
                 modules.ttymetracker_anuko.push_today(aliasesFile)
                 opt = input("¿Abrir Anuko para revisar estas entradas en el navegador? [S/n] ")
                 if opt=='' or opt.lower()=='s':
                     os.system("xdg-open '{}'".format(anuko_url))
-                sys.exit()
             elif 'sharepoint' in args.modules:
                 ctxAuth = AuthenticationContext(sharepoint_url)
                 if ctxAuth.acquire_token_for_user(sharepoint_username, sharepoint_password):
@@ -154,13 +160,12 @@ if __name__ == '__main__':
                         os.system("xdg-open '{}'".format(sharepoint_check_url))
                 else:
                     print(ctxAuth.get_last_error())
-                sys.exit()
-            else:
-                sys.exit()
+            if args.git:
+                pass
+                #WIP: `git add .; git commit -m "{} #{}".format(today, numOfCommit); git push origin master`
+    except FileNotFoundError:
+        print("\033[91m[!]\033[0m {} no existe".format(logbooksDir))
     except KeyboardInterrupt:
         print("\ntaluego!")
-        sys.exit()
     except Exception as e:
         print("\033[91m[!]\033[0m {}".format(e))
-        print("\ntaluego!")
-        sys.exit()

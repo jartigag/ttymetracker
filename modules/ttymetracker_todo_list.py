@@ -11,12 +11,15 @@
 # usage: python3 ttymetracker.py logbooksDir --modules todo-list
 
 __author__ = "@jartigag"
-__version__ = "0.5"
+__version__ = "0.6"
 
 # changelog:
 #
 # -- v0.5 --:
-# * start/stop session in todo-list
+# * start/stop session from todo-list
+#
+# -- v0.6 --:
+# * pause session from todo-list
 
 import os
 from datetime import datetime
