@@ -11,5 +11,6 @@ sharepoint_password=''
 sharepoint_userid=0
 
 git_remoteURL=''
-git_config_name=''
-git_config_email=''
+git_userBranch=''
+git_configName=''
+git_configEmail=''

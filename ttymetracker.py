@@ -47,6 +47,7 @@ import modules.ttymetracker_anuko
 import modules.ttymetracker_sharepoint
 from ttymetracker_credentials import *
 from time import sleep
+from datetime import datetime
 from office365.runtime.auth.authentication_context import AuthenticationContext
 from office365.sharepoint.client_context import ClientContext
 
@@ -105,11 +106,18 @@ if __name__ == '__main__':
         logbooks = sorted([f for f in os.listdir(logbooksDir) if re.match(r'[0-9]+.*\.md', f)])
         load_files(args.list)
         if args.git:
-            pass
             #WIP: `cd args.logbook`
-            #WIP: if not .git/: `git init && git remote add origin $git_remoteURL && git pull origin master`
-            #WIP: if not .gitignore: add "ttymetracker_credentials.py; *.tmp; *.cfg" to .gitignore
+            os.chdir(args.logbook)
+            #WIP: if not .git/:
+            if not os.path.isdir('.git'):
+                os.system("git init && git remote add origin {}".format(git_remoteURL))
+                os.system("git fetch --all && ( git checkout {0} 2>/dev/null || git checkout -b {0} ) && git pull origin {0}".format(git_userBranch)) #create branch if not exists https://stackoverflow.com/a/35683029
             #WIP: if gitconfig local != ($git_config_name & $git_config_email): gitconfig local
+            git_localName = os.popen('git config --local user.name').read().strip()
+            git_localEmail = os.popen('git config --local user.email').read().strip()
+            if git_configName!=git_localName or git_configEmail!=git_localEmail:
+                #WIP: git_config_local()
+                pass
         if 'todo-list' in args.modules:
             while True:
                 todos, dones = load_lists(logbooks, logbooksDir)
@@ -163,8 +171,10 @@ if __name__ == '__main__':
                 else:
                     print(ctxAuth.get_last_error())
             if args.git:
-                pass
                 #WIP: `git add .; git commit -m "{} #{}".format(today, numOfCommit); git push origin master`
+                today_short = datetime.now().strftime("%Y-%m-%d")
+                os.chdir(args.logbook)
+                os.system("git add .; git commit -m '{}'; git push origin {}".format(today_short,git_userBranch))
     except FileNotFoundError:
         print("\033[91m[!]\033[0m {} no existe".format(logbooksDir))
     except KeyboardInterrupt:
