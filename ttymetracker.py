@@ -140,8 +140,10 @@ if __name__ == '__main__':
                         pass
                     else:
                         print("\033[91m[!]\033[0m número inválido")
+                        continue
                     print("\033[1mRecargando..\033[0m")
                     sleep(0.5)
+                    load_files(args.list)
         elif 'anuko' or 'sharepoint' in args.modules:
             if 'anuko' in args.modules:
                 modules.ttymetracker_anuko.commit_today(logbooksDir, aliasesFile)
