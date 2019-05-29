@@ -11,7 +11,7 @@
 # usage: python3 ttymetracker.py logbooksDir --modules [todo-list anuko sharepoint]
 
 __author__ = "@jartigag"
-__version__ = "0.6"
+__version__ = "0.7"
 
 #changelog:
 #
@@ -85,6 +85,20 @@ def load_files(listFormat):
         except IOError:
             continue
 
+def update_git():
+    os.chdir(logbooksDir)
+    # check if git config is correct:
+    git_localName = os.popen("git config --local user.name").read().strip()
+    git_localEmail = os.popen("git config --local user.email").read().strip()
+    if git_configName!=git_localName or git_configEmail!=git_localEmail:
+        print("\033[1m[-]\033[0m Usando las variables de ttymetracker_credentials.py,\nse configurará user.name \"{}\" y user.email \"{}\" para este repositorio de git\n".format(git_configName,git_configEmail))
+        os.system("git config user.name '{}'; git config user.email '{}'".format(git_configName,git_configEmail))
+
+    # git push:
+    today_short = datetime.now().strftime("%y-%m-%d")
+    os.system("git pull origin master; git add .; git commit -m '{}'; git push origin master".format(today_short))
+    print("\n\033[1m[-]\033[0m El repositorio de git {} se ha actualizado\n".format(git_remoteURL))
+
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(
@@ -95,9 +109,9 @@ if __name__ == '__main__':
     parser.add_argument('-m','--modules',choices=['todo-list','anuko','sharepoint'],default='',
         help='funcionalidades que se van a cargar')
     parser.add_argument('-a','--aliasesFile',
-            help='fichero JSON (.cfg) que asocia #etiquetas con clientes-proyectos-tareas')
-    parser.add_argument('-g','--git',
-            help='')
+        help='fichero JSON (.cfg) que asocia #etiquetas con clientes-proyectos-tareas')
+    parser.add_argument('-g','--git',action='store_true',
+        help='llevar los .md de cada día en un repositorio git')
     args = parser.parse_args()
     logbooksDir = args.logbooksDir
     if logbooksDir.endswith('/'): logbooksDir=logbooksDir[:-1]
@@ -106,18 +120,17 @@ if __name__ == '__main__':
         logbooks = sorted([f for f in os.listdir(logbooksDir) if re.match(r'[0-9]+.*\.md', f)])
         load_files(args.list)
         if args.git:
-            #WIP: `cd args.logbook`
-            os.chdir(args.logbook)
-            #WIP: if not .git/:
-            if not os.path.isdir('.git'):
-                os.system("git init && git remote add origin {}".format(git_remoteURL))
-                os.system("git fetch --all && ( git checkout {0} 2>/dev/null || git checkout -b {0} ) && git pull origin {0}".format(git_userBranch)) #create branch if not exists https://stackoverflow.com/a/35683029
-            #WIP: if gitconfig local != ($git_config_name & $git_config_email): gitconfig local
-            git_localName = os.popen('git config --local user.name').read().strip()
-            git_localEmail = os.popen('git config --local user.email').read().strip()
-            if git_configName!=git_localName or git_configEmail!=git_localEmail:
-                #WIP: git_config_local()
-                pass
+            os.chdir(logbooksDir)
+            if not os.path.isdir(".git"): #if logbooksDir is not a git directory:
+                os.chdir("..")
+                os.system("git clone {}".format(git_remoteURL))
+                gitDir = git_remoteURL.split('/')[-1].strip('.git') # e.g.: mydoma.in/repos/logbooks-john-doe.git -> logbooks-john-doe
+                gitDir = "{}/{}".format("/".join(logbooksDir.split('/')[:-1]),gitDir) # e.g.: /home/user/logbooks-john-doe
+                print("\n\033[1mAVISO\033[0m: Para llevar el control de los .md de cada día en el repositorio que se acaba de clonar,\
+                        \nla próxima vez se debe ejecutar \033[1mpython3 ttymetracker.py {}\033[0m\n".format(gitDir))
+                logbooksDir = gitDir # note that, next time ttymetracker.py will be executed, the arg logbooksDir must be the new directory (which is a git dir),
+                                     #  so these lines under `if not os.path.isdir(".git")` won't apply
+                update_git()
         if 'todo-list' in args.modules:
             while True:
                 todos, dones = load_lists(logbooks, logbooksDir)
@@ -152,31 +165,25 @@ if __name__ == '__main__':
                     print("\033[1mRecargando..\033[0m")
                     sleep(0.5)
                     load_files(args.list)
-        elif 'anuko' or 'sharepoint' in args.modules:
-            if 'anuko' in args.modules:
-                modules.ttymetracker_anuko.commit_today(logbooksDir, aliasesFile)
-                modules.ttymetracker_anuko.push_today(aliasesFile)
-                opt = input("¿Abrir Anuko para revisar estas entradas en el navegador? [S/n] ")
+        if 'anuko' in args.modules:
+            modules.ttymetracker_anuko.commit_today(logbooksDir, aliasesFile)
+            modules.ttymetracker_anuko.push_today(aliasesFile)
+            opt = input("¿Abrir Anuko para revisar estas entradas en el navegador? [S/n] ")
+            if opt=='' or opt.lower()=='s':
+                os.system("xdg-open '{}'".format(anuko_url))
+            update_git()
+        elif 'sharepoint' in args.modules:
+            ctxAuth = AuthenticationContext(sharepoint_url)
+            if ctxAuth.acquire_token_for_user(sharepoint_username, sharepoint_password):
+                ctx = ClientContext(sharepoint_url, ctxAuth)
+                modules.ttymetracker_sharepoint.commit_today(logbooksDir, aliasesFile)
+                modules.ttymetracker_sharepoint.push_today(ctx, aliasesFile)
+                opt = input("¿Abrir Sharepoint para revisar estas entradas en el navegador? [S/n] ")
                 if opt=='' or opt.lower()=='s':
-                    os.system("xdg-open '{}'".format(anuko_url))
-            elif 'sharepoint' in args.modules:
-                ctxAuth = AuthenticationContext(sharepoint_url)
-                if ctxAuth.acquire_token_for_user(sharepoint_username, sharepoint_password):
-                    ctx = ClientContext(sharepoint_url, ctxAuth)
-                    modules.ttymetracker_sharepoint.commit_today(logbooksDir, aliasesFile)
-                    modules.ttymetracker_sharepoint.push_today(ctx, aliasesFile)
-                    opt = input("¿Abrir Sharepoint para revisar estas entradas en el navegador? [S/n] ")
-                    if opt=='' or opt.lower()=='s':
-                        os.system("xdg-open '{}'".format(sharepoint_check_url))
-                else:
-                    print(ctxAuth.get_last_error())
-            if args.git:
-                #WIP: `git add .; git commit -m "{} #{}".format(today, numOfCommit); git push origin master`
-                today_short = datetime.now().strftime("%Y-%m-%d")
-                os.chdir(args.logbook)
-                os.system("git add .; git commit -m '{}'; git push origin {}".format(today_short,git_userBranch))
-    except FileNotFoundError:
-        print("\033[91m[!]\033[0m {} no existe".format(logbooksDir))
+                    os.system("xdg-open '{}'".format(sharepoint_check_url))
+                update_git()
+            else:
+                print(ctxAuth.get_last_error())
     except KeyboardInterrupt:
         print("\ntaluego!")
     except Exception as e:

@@ -24,7 +24,7 @@ and manage your pending and completed tasks.
 # usage: python3 ttymetracker.py logbooksDir --modules [todo-list anuko sharepoint]
 
 __author__ = "@jartigag"
-__version__ = "0.6"
+__version__ = "0.7"
 
 #changelog:
 #
