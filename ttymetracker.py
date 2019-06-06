@@ -95,7 +95,7 @@ def update_git():
         os.system("git config user.name '{}'; git config user.email '{}'".format(git_configName,git_configEmail))
 
     # git push:
-    today_short = datetime.now().strftime("%y-%m-%d")
+    today_short = datetime.now().strftime("%Y-%m-%d")
     os.system("git pull origin master; git add .; git commit -m '{}'; git push origin master".format(today_short))
     print("\n\033[1m[-]\033[0m El repositorio de git {} se ha actualizado\n".format(git_remoteURL))
 
