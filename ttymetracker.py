@@ -13,6 +13,10 @@
 __author__ = "@jartigag"
 __version__ = "0.7"
 
+#TODO:
+# -- v0.8 --:
+# * extract % spent on each #task
+
 #changelog:
 #
 # -- v0.2 --:
