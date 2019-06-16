@@ -11,11 +11,7 @@
 # usage: python3 ttymetracker.py logbooksDir --modules [todo-list anuko sharepoint]
 
 __author__ = "@jartigag"
-__version__ = "0.7"
-
-#TODO:
-# -- v0.8 --:
-# * extract % spent on each #task
+__version__ = "0.8"
 
 #changelog:
 #
@@ -42,6 +38,9 @@ __version__ = "0.7"
 #
 # -- v0.7 --:
 # * --git
+#
+# -- v0.8 --:
+# * --percent: extract percent of time spent on each #tag
 
 import os, sys
 import re
@@ -63,17 +62,20 @@ lun 04 mar 2019 15:05:54 CET
 > Correcciones en las gráficas de amazonDashboard
 '''
 
-def load_files(listFormat):
+def load_files(listFormat,percent=False):
+    if percent: tags = {}
     for lb in logbooks:
         try:
             with open('{}/{}'.format(logbooksDir,lb)) as f:
                 lines = f.readlines()
                 day = ''
+                if percent: time = '09:00'
                 for line in lines:
                     i = lines.index(line)
                     if i==len(lines)-1: break
                     if lines[i+1]=='---\n': # if this line it's a timestamp:
                         if lines[i+2][0]=='>':    # if there's a note on this timestamp:
+
                             actual_day = ''.join( line.split(':')[0][:-2] ) # line.split(':')[0][:-2] takes something like 'lun 04 mar 2019 '
                             if actual_day!=day:
                                 day = actual_day
@@ -81,13 +83,36 @@ def load_files(listFormat):
                                     if day[:3]=='lun':
                                         print("=====\n")
                                     print('\033[4m{}\033[0m'.format(day))
+
                             timestamp = ':'.join([ line.split(':')[0][-2:], line.split(':')[1], line.split(':')[2][:2] ]) # this takes something like '10:23:01'
+
+                            if percent:
+                                previous_time = time
+                                time = timestamp[:-3]
+                                hours = float("{0:.2f}".format((datetime.strptime(time,"%H:%M") - datetime.strptime(previous_time,"%H:%M")).total_seconds()/3600))
+                                if '#' in lines[i+2]:
+                                    tag = lines[i+2].split('#')[-1].rsplit(' ')[0]
+                                    tag = re.sub(r'[^a-zA-Z ]+', '',tag).lower()
+                                    if any(tag==x for x in ['todo','fixme','debug','g']): continue
+                                    if tag not in tags.keys(): tags[tag]=0
+                                    else: tags[tag]+=hours
+
                         if not listFormat:
                             print('{}{}'.format(timestamp,lines[i+2])) # print timestamp and note
                         else:
                             print('{}- {}{}'.format(day,timestamp,lines[i+2])) # print day, timestamp and note
         except IOError:
             continue
+
+    if percent:
+        total_hours = 0
+        tags_sorted_by_value = sorted(tags.items(), key=lambda kv: kv[1])
+        for t in tags_sorted_by_value:
+            rounded_hours = int(round(t[1]))
+            print('{}h\t{}'.format(rounded_hours,t[0]))
+            total_hours+=rounded_hours
+        print('---')
+        print('{}h\ttotal'.format(total_hours))
 
 def update_git():
     os.chdir(logbooksDir)
@@ -116,13 +141,15 @@ if __name__ == '__main__':
         help='fichero JSON (.cfg) que asocia #etiquetas con clientes-proyectos-tareas')
     parser.add_argument('-g','--git',action='store_true',
         help='llevar los .md de cada día en un repositorio git')
+    parser.add_argument('-p','--percent',action='store_true',
+        help='imprimir el porcentaje de tiempo dedicado a cada #etiqueta')
     args = parser.parse_args()
     logbooksDir = args.logbooksDir
     if logbooksDir.endswith('/'): logbooksDir=logbooksDir[:-1]
     aliasesFile = args.aliasesFile
     try:
         logbooks = sorted([f for f in os.listdir(logbooksDir) if re.match(r'[0-9]+.*\.md', f)])
-        load_files(args.list)
+        load_files(args.list,args.percent)
         if args.git:
             os.chdir(logbooksDir)
             if not os.path.isdir(".git"): #if logbooksDir is not a git directory:

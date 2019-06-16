@@ -2,6 +2,7 @@ ttymetracker_credentials.py
 *.bak
 *.tmp
 *.cfg
+percent_tags.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

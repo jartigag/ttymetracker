@@ -51,6 +51,9 @@ __version__ = "0.7"
 #
 # -- v0.7 --:
 # * --git
+#
+# -- v0.8 --:
+# * --percent: extract percent of time spent on each #tag
 ```
 
 ### `vim-logbook`, huh?
