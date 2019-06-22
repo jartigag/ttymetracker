@@ -24,7 +24,7 @@ and manage your pending and completed tasks.
 # usage: python3 ttymetracker.py logbooksDir --modules [todo-list anuko sharepoint]
 
 __author__ = "@jartigag"
-__version__ = "0.7"
+__version__ = "0.9"
 
 #changelog:
 #
@@ -54,6 +54,11 @@ __version__ = "0.7"
 #
 # -- v0.8 --:
 # * --percent: extract percent of time spent on each #tag
+#
+# -- v0.9 --:
+# * start_hour defined either on ttymetracker_credentials.py or from start session
+# * when commiting, ignore [start/end session/pause] lines
+# * when commiting, show sum of hours
 ```
 
 ### `vim-logbook`, huh?

@@ -11,7 +11,7 @@
 # usage: python3 ttymetracker.py logbooksDir --modules [todo-list anuko sharepoint]
 
 __author__ = "@jartigag"
-__version__ = "0.8"
+__version__ = "0.9"
 
 #changelog:
 #
@@ -41,6 +41,11 @@ __version__ = "0.8"
 #
 # -- v0.8 --:
 # * --percent: extract percent of time spent on each #tag
+#
+# -- v0.9 --:
+# * start_hour defined either on ttymetracker_credentials.py or from start session
+# * when commiting, ignore [start/end session/pause] lines
+# * when commiting, show sum of hours
 
 import os, sys
 import re
@@ -69,7 +74,7 @@ def load_files(listFormat,percent=False):
             with open('{}/{}'.format(logbooksDir,lb)) as f:
                 lines = f.readlines()
                 day = ''
-                if percent: time = '09:00'
+                if percent: time = starting_hour
                 for line in lines:
                     i = lines.index(line)
                     if i==len(lines)-1: break
@@ -85,6 +90,8 @@ def load_files(listFormat,percent=False):
                                     print('\033[4m{}\033[0m'.format(day))
 
                             timestamp = ':'.join([ line.split(':')[0][-2:], line.split(':')[1], line.split(':')[2][:2] ]) # this takes something like '10:23:01'
+                            if lines[i+2][0]=='> Inicio de sesión\n':
+                                time = timestamp[:-3]
 
                             if percent:
                                 previous_time = time
@@ -202,18 +209,23 @@ if __name__ == '__main__':
             opt = input("¿Abrir Anuko para revisar estas entradas en el navegador? [S/n] ")
             if opt=='' or opt.lower()=='s':
                 os.system("xdg-open '{}'".format(anuko_url))
-            update_git()
+            if args.git:
+                update_git()
         elif 'sharepoint' in args.modules:
+            print('Iniciando autenticación en el Sharepoint {}'.format(sharepoint_url))
             ctxAuth = AuthenticationContext(sharepoint_url)
             if ctxAuth.acquire_token_for_user(sharepoint_username, sharepoint_password):
+                print('Autenticación válida')
                 ctx = ClientContext(sharepoint_url, ctxAuth)
                 modules.ttymetracker_sharepoint.commit_today(logbooksDir, aliasesFile)
                 modules.ttymetracker_sharepoint.push_today(ctx, aliasesFile)
                 opt = input("¿Abrir Sharepoint para revisar estas entradas en el navegador? [S/n] ")
                 if opt=='' or opt.lower()=='s':
                     os.system("xdg-open '{}'".format(sharepoint_check_url))
-                update_git()
+                if args.git:
+                    update_git()
             else:
+                print('Autenticación fallida')
                 print(ctxAuth.get_last_error())
     except KeyboardInterrupt:
         print("\ntaluego!")
