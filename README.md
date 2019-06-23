@@ -1,7 +1,7 @@
 # ~$ ttymetracker
 
 just a simple command-line tool that will help you to track your time  
-and manage your pending and completed tasks.
+and manage your pending and completed tasks, among other things.
 
 ## /content:
 
@@ -10,56 +10,9 @@ and manage your pending and completed tasks.
 
 ---------
 
-```
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-#
-# ##########
-# # ttymetracker: terminal time tracker
-# ##########
-#
-# basically a script to list the tasks you wrote down in your logbook directory
-# and manage them with some modules, like the todo-list one.
-#
-# usage: python3 ttymetracker.py logbooksDir --modules [todo-list anuko sharepoint]
-
-__author__ = "@jartigag"
-__version__ = "0.9"
-
-#changelog:
-#
-# -- v0.2 --:
-# * --modules todo-list
-#
-# -- v0.3 --:
-# * modularization
-# * exit gracefully
-# * install.sh
-#
-# -- v0.4 --:
-# * --list
-# * --modules anuko
-# * --aliasesFile
-#
-# -- v0.5 --:
-# * start/stop session from todo-list
-# * while True
-#
-# -- v0.6 --:
-# * --modules sharepoint
-# * pause session from todo-list
-#
-# -- v0.7 --:
-# * --git
-#
-# -- v0.8 --:
-# * --percent: extract percent of time spent on each #tag
-#
-# -- v0.9 --:
-# * start_hour defined either on ttymetracker_credentials.py or from start session
-# * when commiting, ignore [start/end session/pause] lines
-# * when commiting, show sum of hours
-```
+<a href="https://youtu.be/fcJkX9iVoSQ" target="_blank">
+<img src="screenshot.png" alt="demo on https://youtu.be/fcJkX9iVoSQ" width="640" height="360"
+</a>
 
 ### `vim-logbook`, huh?
 this tool uses the [vim-logbook](https://github.com/jamesroutley/vim-logbook) system by [james routley](https://routley.io/), explained on his project's readme and on his [blogpost](https://routley.io/tech/2017/11/23/logbook.html).  

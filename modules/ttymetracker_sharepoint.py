@@ -10,15 +10,7 @@
 # usage: python3 ttymetracker.py logbooksDir --modules sharepoint
 
 __author__ = "@jartigag"
-__version__ = "0.9"
-
-#TODO: when commit_today(), remove start/end session and pauses automatically
-
-# ttytracker_aliases.cfg: a config json that matches shortcuts with sharepoints projects and clients.
-#                         for example:
-#                         for example: [{"shorcut": "tools", "project": "Mantenimiento de herramientas"}, ...]
-#                                       └── #tools = Mantenimiento de herramientas
-#
+__version__ = "1.0"
 
 from office365.runtime.auth.authentication_context import AuthenticationContext
 from office365.sharepoint.client_context import ClientContext

@@ -1,0 +1,37 @@
+CHANGELOG:
+
+# -- v0.2 --:
+# * --modules todo-list
+#
+# -- v0.3 --:
+# * modularization
+# * exit gracefully
+# * install.sh
+#
+# -- v0.4 --:
+# * --list
+# * --modules anuko
+# * --aliasesFile
+#
+# -- v0.5 --:
+# * start/stop session from todo-list
+# * while True
+#
+# -- v0.6 --:
+# * --modules sharepoint
+# * pause session from todo-list
+#
+# -- v0.7 --:
+# * --git
+#
+# -- v0.8 --:
+# * --percent: extract percent of time spent on each #tag
+#
+# -- v0.9 --:
+# * starting_hour defined either on ttymetracker_credentials.py or from start session
+# * when commiting, ignore [start/end session/pause] lines
+# * when commiting, show sum of hours
+#
+# -- v1.0 --:
+# * files prettified. changelog in a new file
+# * demo on video

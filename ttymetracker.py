@@ -8,44 +8,10 @@
 # basically a script to list the tasks you wrote down in your logbook directory
 # and manage them with some modules, like the todo-list one.
 #
-# usage: python3 ttymetracker.py logbooksDir --modules [todo-list anuko sharepoint]
+# usage: python3 ttymetracker.py logbooksDir --modules [todo-list anuko sharepoint] --git --percent --aliasesFile ttymetracker_aliases.cfg
 
 __author__ = "@jartigag"
-__version__ = "0.9"
-
-#changelog:
-#
-# -- v0.2 --:
-# * --modules todo-list
-#
-# -- v0.3 --:
-# * modularization
-# * exit gracefully
-# * install.sh
-#
-# -- v0.4 --:
-# * --list
-# * --modules anuko
-# * --aliasesFile
-#
-# -- v0.5 --:
-# * start/stop session from todo-list
-# * while True
-#
-# -- v0.6 --:
-# * --modules sharepoint
-# * pause session from todo-list
-#
-# -- v0.7 --:
-# * --git
-#
-# -- v0.8 --:
-# * --percent: extract percent of time spent on each #tag
-#
-# -- v0.9 --:
-# * start_hour defined either on ttymetracker_credentials.py or from start session
-# * when commiting, ignore [start/end session/pause] lines
-# * when commiting, show sum of hours
+__version__ = "1.0"
 
 import os, sys
 import re
