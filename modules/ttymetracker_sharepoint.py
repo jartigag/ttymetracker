@@ -55,7 +55,7 @@ def push_note(ctx, start, hours, project, note, timezone=0):
         list_object = ctx.web.lists.get_by_title(sharepoint_listTitle)
         # timezone adjustement:
         start = "{}:{}".format(int(start.split(":")[0])+timezone,start.split(":")[1])
-        if int(start.split(":")[0])-2 < 10: # if start='9:45'
+        if int(start.split(":")[0]) < 10: # if start='9:45'
             start = "0{}".format(start)     #   start='09:45'
         item_properties = {'__metadata': {'type': sharepoint_itemType}, 'Title': note, 'Horas': hours, 'UsuarioId': sharepoint_userid, 'ProyectoId': project['project_id'],
                 'Fecha': "{}T{}:00Z".format(datetime.now().strftime("%Y-%m-%d"),start)}
