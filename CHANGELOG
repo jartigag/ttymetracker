@@ -35,3 +35,6 @@ CHANGELOG:
 # -- v1.0 --:
 # * files prettified. changelog in a new file
 # * demo on video
+#
+# -- v1.1 --:
+# * "mark as wip" from todo-list

@@ -11,12 +11,12 @@
 # usage: python3 ttymetracker.py logbooksDir --modules [todo-list anuko sharepoint] --git --percent --aliasesFile ttymetracker_aliases.cfg
 
 __author__ = "@jartigag"
-__version__ = "1.0"
+__version__ = "1.1"
 
 import os, sys
 import re
 import argparse
-from modules.ttymetracker_todo_list import load_lists, print_list, mark_as_completed, session_event
+from modules.ttymetracker_todo_list import load_lists, print_list, mark_as_completed, mark_as_wip, session_event
 import modules.ttymetracker_anuko
 import modules.ttymetracker_sharepoint
 from ttymetracker_credentials import *
@@ -161,10 +161,19 @@ if __name__ == '__main__':
                     elif opt=='P':
                         session_event(logbooksDir, "end_pause")
                         print("\033[1mFin pausa\033[0m")
+                    elif len(opt)>1:
+                        if opt[0]=='.':
+                            if int(opt[1:])<len(todos) and int(opt[1:])>=0: # `opt` is a valid index of `todos`
+                                mark_as_wip(int(opt[1:]), todos, logbooksDir)
+                                print("La tarea {}:\n\t\033[1m{}\033[0m\nse ha marcado como 'en progreso'\n".format(opt[1:],todos[int(opt[1:])]))
+                                todos, dones = load_lists(logbooks, logbooksDir)
+                                load_files(args.list)
                     elif opt=='':
                         pass
                     else:
                         print("\033[91m[!]\033[0m número inválido")
+                        sleep(0.5)
+                        load_files(args.list)
                         continue
                     print("\033[1mRecargando..\033[0m")
                     sleep(0.5)
@@ -195,5 +204,5 @@ if __name__ == '__main__':
                 print(ctxAuth.get_last_error())
     except KeyboardInterrupt:
         print("\ntaluego!")
-    except Exception as e:
-        print("\033[91m[!]\033[0m {}".format(e))
+    #except Exception as e:
+    #    print("\033[91m[!]\033[0m {}".format(e))
