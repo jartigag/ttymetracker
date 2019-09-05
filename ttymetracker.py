@@ -34,6 +34,7 @@ lun 04 mar 2019 15:05:54 CET
 '''
 
 def load_files(listFormat,percent=False):
+    logbooks = sorted([f for f in os.listdir(logbooksDir) if re.match(r'[0-9]+.*\.md', f)])
     if percent: tags = {}
     for lb in logbooks:
         try:
@@ -86,6 +87,7 @@ def load_files(listFormat,percent=False):
             total_hours+=rounded_hours
         print('---')
         print('{}h\ttotal'.format(total_hours))
+    return logbooks
 
 def update_git():
     os.chdir(logbooksDir)
@@ -121,8 +123,7 @@ if __name__ == '__main__':
     if logbooksDir.endswith('/'): logbooksDir=logbooksDir[:-1]
     aliasesFile = args.aliasesFile
     try:
-        logbooks = sorted([f for f in os.listdir(logbooksDir) if re.match(r'[0-9]+.*\.md', f)])
-        load_files(args.list,args.percent)
+        logbooks = load_files(args.list,args.percent)
         if args.git:
             os.chdir(logbooksDir)
             if not os.path.isdir(".git"): #if logbooksDir is not a git directory:
@@ -137,6 +138,7 @@ if __name__ == '__main__':
                 update_git()
         if 'todo-list' in args.modules:
             while True:
+                logbooks = load_files(args.list,args.percent)
                 todos, dones = load_lists(logbooks, logbooksDir)
                 print_list(todos, dones)
                 opt = input("Marcar como completada la tarea nº: ")
