@@ -30,15 +30,15 @@ import sys
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-def commit_today(logbooksDir, aliasesFile):
+def commit_today(logbooksDir, aliasesFile, confirmation=False):
     try:
         today_short = datetime.now().strftime("%Y-%m-%d")
         today_file = "{}/{}.md".format(logbooksDir, today_short)
         with open(today_file) as f, open("commit.tmp","w") as c:
             c.write("## Revisa tu registro de hoy {} antes de publicarlo en Anuko.\n## Las líneas que empiezan con '##' serán ignoradas.\n".format(today_short))
             if aliasesFile: c.write("##\n## Las notas con #etiquetas configuradas en {} se completarán con sus datos correspondientes.\n".format(aliasesFile))
-            c.write("## En Vim, ejecuta :Round para redondear los tiempos al cuarto de hora (ejemplo: 00:17 -> 00:15).\n")
-            c.write('\n##~ Elimina esta línea para confirmar la publicación de este registro ~##\n\n')
+            c.write("## Si usas Vim, puedes ejecutar :Round para redondear los tiempos al cuarto de hora (ejemplo: 00:17 -> 00:15).\n")
+            if confirmation: c.write('\n##~ ¿Has terminado de revisar este registro? Elimina esta línea para confirmar su publicación ~##\n')
             c.write("## DESDE - HASTA   | NOTA\n")
             lines = f.readlines()
             time = '09:00'

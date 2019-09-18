@@ -114,6 +114,8 @@ if __name__ == '__main__':
         help='funcionalidades que se van a cargar')
     parser.add_argument('-a','--aliasesFile',
         help='fichero JSON (.cfg) que asocia #etiquetas con clientes-proyectos-tareas')
+    parser.add_argument('-c','--confirmations',action='store_true',
+        help='preguntar antes de publicar y para revisar lo publicado')
     parser.add_argument('-g','--git',action='store_true',
         help='llevar los .md de cada día en un repositorio git')
     parser.add_argument('-p','--percent',action='store_true',
@@ -181,11 +183,12 @@ if __name__ == '__main__':
                     sleep(0.5)
                     load_files(args.list)
         if 'anuko' in args.modules:
-            modules.ttymetracker_anuko.commit_today(logbooksDir, aliasesFile)
+            modules.ttymetracker_anuko.commit_today(logbooksDir, aliasesFile, args.confirmations)
             modules.ttymetracker_anuko.push_today(aliasesFile)
-            opt = input("¿Abrir Anuko para revisar estas entradas en el navegador? [S/n] ")
-            if opt=='' or opt.lower()=='s':
-                os.system("xdg-open '{}'".format(anuko_url))
+            if args.confirmations:
+                opt = input("¿Abrir Anuko para revisar estas entradas en el navegador? [S/n] ")
+                if opt=='' or opt.lower()=='s':
+                    os.system("xdg-open '{}'".format(anuko_url))
             if args.git:
                 update_git()
         elif 'sharepoint' in args.modules:
@@ -194,11 +197,12 @@ if __name__ == '__main__':
             if ctxAuth.acquire_token_for_user(sharepoint_username, sharepoint_password):
                 print('Autenticación válida')
                 ctx = ClientContext(sharepoint_url, ctxAuth)
-                modules.ttymetracker_sharepoint.commit_today(logbooksDir, aliasesFile)
+                modules.ttymetracker_sharepoint.commit_today(logbooksDir, aliasesFile, args.confirmations)
                 modules.ttymetracker_sharepoint.push_today(ctx, aliasesFile)
-                opt = input("¿Abrir Sharepoint para revisar estas entradas en el navegador? [S/n] ")
-                if opt=='' or opt.lower()=='s':
-                    os.system("xdg-open '{}'".format(sharepoint_check_url))
+                if args.confirmations:
+                    opt = input("¿Abrir Sharepoint para revisar estas entradas en el navegador? [S/n] ")
+                    if opt=='' or opt.lower()=='s':
+                        os.system("xdg-open '{}'".format(sharepoint_check_url))
                 if args.git:
                     update_git()
             else:
@@ -206,5 +210,5 @@ if __name__ == '__main__':
                 print(ctxAuth.get_last_error())
     except KeyboardInterrupt:
         print("\ntaluego!")
-    #except Exception as e:
-    #    print("\033[91m[!]\033[0m {}".format(e))
+    except Exception as e:
+        print("\033[91m[!]\033[0m {}".format(e))

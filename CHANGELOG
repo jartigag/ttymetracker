@@ -38,3 +38,4 @@ CHANGELOG:
 #
 # -- v1.1 --:
 # * "mark as wip" from todo-list
+# * --confirmations: ask before publishing and after it (to review)
